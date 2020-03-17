@@ -10,74 +10,101 @@ import UIKit
 
 
 class ViewController: UIViewController {
-
     @IBOutlet private weak var scoreLabel: UILabel!
-    @IBOutlet private var cardButtons: [GameCardButton]!
-
+    private lazy var tableViewGrid = Grid(layout: .aspectRatio(Constants.cardRatio), frame: tableView.bounds)
     private var game = Game()
+    @IBOutlet weak var tableView: UIView! {
+        didSet {
+            let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(addMoreCards))
+            swipeDown.direction = [.down]
+            tableView.addGestureRecognizer(swipeDown)
+
+            let pinch = UIPinchGestureRecognizer(target: self, action: #selector(reshuffleCards))
+            tableView.addGestureRecognizer(pinch)
+        }
+    }
+
+    @objc private func reshuffleCards(_ recognizer: UIPinchGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            game.reshuffleCardsOnTable()
+            updateViewFromModel()
+        default:
+            break
+        }
+    }
+
+    @objc private func addMoreCards(_ recognizer: UISwipeGestureRecognizer) {
+        switch recognizer.state {
+        case .ended:
+            game.addCardsOnTable()
+            clearTableViewFromSubviews()
+            updateViewFromModel()
+        default:
+            break
+        }
+
+    }
 
     @IBAction private func startNewGame(_ sender: UIButton) {
         game = Game()
         updateViewFromModel()
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableViewGrid = Grid(layout: .aspectRatio(Constants.cardRatio), frame: tableView.bounds)
+        clearTableViewFromSubviews()
         updateViewFromModel()
     }
 
-    private func getAttributedString(for card: Card?) -> NSAttributedString {
-        guard let card = card else {
-            return NSMutableAttributedString()
-        }
-
-        let color = card.color.getUIColor()
-        let alpha = card.shading.getAlpha()
-        let attributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: color.withAlphaComponent(alpha)
-        ]
-
-        let string: String
-        let shape = card.shape.getShape()
-        switch card.number {
-        case .one:
-            string = "\n\(shape)\n"
-        case .two:
-            string = "\(shape)\n\(shape)"
-        case .three:
-            string = "\(shape)\n\(shape)\n\(shape)"
-        }
-
-        return NSAttributedString(string: string, attributes: attributes)
+    private func clearTableViewFromSubviews() {
+        tableView.subviews.forEach { $0.removeFromSuperview() }
     }
-
-    @IBAction private func touchCard(_ button: GameCardButton) {
-        guard let index = cardButtons.firstIndex(of: button) else {
-            return
-        }
-        if game.chosenCards.contains(index) {
-            game.disapproveCard(at: index)
-        } else {
-            game.chooseCard(at: index)
-        }
-        updateViewFromModel()
-    }
-
 
     private func updateViewFromModel() {
         scoreLabel.text = "Score: \(game.score)"
-        for index in cardButtons.indices {
-            let btn = cardButtons[index]
-            let card = game.cardsOnTable[index]
-            btn.setAttributedTitle(getAttributedString(for: card), for: .normal)
+        tableViewGrid.cellCount = game.cardsOnTable.count
 
-            if game.chosenCards.contains(index) {
-                btn.layer.borderWidth = 3.0
-                btn.layer.borderColor = UIColor.blue.cgColor
+        for index in game.cardsOnTable.indices {
+            let card = game.cardsOnTable[index]
+            let cellFrame = tableViewGrid[index] ?? CGRect.zero
+            let cardView = CardView(frame: cellFrame.narrowDown(by: Constants.cardsOffset), card: card)
+            cardView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(touchCard)))
+            tableView.addSubview(cardView)
+
+            if game.chosenCards.contains(card) {
+                cardView.addBorder()
             } else {
-                btn.layer.borderWidth = 0.0
+                cardView.removeBorder()
             }
         }
     }
+
+    @objc private func touchCard(_ recognizer: UITapGestureRecognizer) {
+        guard let cardView = recognizer.view as? CardView else { return }
+        let card = cardView.card
+        if game.chosenCards.contains(card) {
+            game.disapproveCard(card: card)
+        } else {
+            game.chooseCard(card: card)
+        }
+        updateViewFromModel()
+    }
 }
+
+extension ViewController {
+    private struct Constants {
+        static let cardRatio: CGFloat = 5 / 8
+        static let cardsOffset: CGFloat = 5
+    }
+}
+
+extension CGRect {
+    func narrowDown(by: CGFloat) -> CGRect {
+        let newSize = CGSize(width: self.width - by, height: self.height - by)
+        return CGRect(origin: self.origin, size: newSize)
+    }
+}
+
 
