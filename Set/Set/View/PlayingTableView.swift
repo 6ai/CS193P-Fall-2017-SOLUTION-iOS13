@@ -23,6 +23,8 @@ class PlayingTableView: UIView {
                 return false
             }
         })
+
+
         if tableCardsLayout.count > tableCards.count {
             for index in tableCardsLayout.indices {
                 let cardOnTable = tableCardsLayout[index].view.card

@@ -41,7 +41,7 @@ class ViewController: UIViewController {
             var cardOnTable = tableView.tableCardsLayout[index]
             switch cardOnTable.stat {
             case .matchedCard(let matchedCardView):
-                matchedCardView.border = false
+                matchedCardView.isSelected = false
                 matchedCards.append(matchedCardView)
                 needLayingOutCards.append(cardOnTable.view)
             case .updateFrame(let newFrame):
@@ -52,7 +52,7 @@ class ViewController: UIViewController {
             case .deleted:
                 matchedCards.append(cardOnTable.view)
             }
-            cardOnTable.view.border = game.takenCards.contains(cardOnTable.view.card)
+            cardOnTable.view.isSelected = game.takenCards.contains(cardOnTable.view.card)
             tableView.addSubview(cardOnTable.view)
             cardOnTable.view.addGestureRecognizer(UITapGestureRecognizer(
                     target: self, action: #selector(clickOnCardView)))

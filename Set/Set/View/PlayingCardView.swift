@@ -11,27 +11,12 @@ import UIKit
 @IBDesignable
 class PlayingCardView: UIView {
     var card: PlayingCard = PlayingCard(color: .green, shape: .squiggle, number: .three, shading: .stripe) {
-        didSet {
-            setNeedsDisplay(); setNeedsLayout()
-        }
-    }
-    @IBInspectable
-    var isFaceUp: Bool = true {
-        didSet {
-            setNeedsDisplay(); setNeedsLayout()
-        }
+        didSet { setNeedsDisplay(); setNeedsLayout() }
     }
 
-    public var border = false {
-        didSet {
-            switch border {
-            case true:
-                addBorder()
-            case false:
-                removeBorder()
-            }
-        }
-    }
+    @IBInspectable
+    var isFaceUp: Bool = true { didSet { setNeedsDisplay(); setNeedsLayout() } }
+    var isSelected: Bool = false { didSet { isSelected ? addBorder() : removeBorder() } }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,9 +25,7 @@ class PlayingCardView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-
         configure()
-
     }
 
 
@@ -56,20 +39,18 @@ class PlayingCardView: UIView {
         if isFaceUp {
             addFigures()
         }
-
     }
 
-    func addBorder() {
+    private func addBorder() {
         layer.borderColor = Constants.borderColor
         layer.borderWidth = lineWidth * 2
     }
 
-    func removeBorder() {
+    private func removeBorder() {
         layer.borderWidth = 0
     }
 
     private func configure() {
-        backgroundColor = isFaceUp ? .white : .green
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
     }
@@ -79,15 +60,10 @@ class PlayingCardView: UIView {
         backgroundColor = isFaceUp ? .white : .green
     }
 
-    private func roundView() {
-        let roundedRect = UIBezierPath(roundedRect: self.frame, cornerRadius: cornerRadius)
-        Constants.cardColor.setFill()
-        roundedRect.addClip()
-        roundedRect.fill()
-    }
-
     private func addFigures() {
-        guard let context = UIGraphicsGetCurrentContext() else { return }
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return
+        }
         for (x, y) in coordinatesOfShapes {
             context.createFigurePath(figure: card.shape, scale: self.scale, translate: (x: x, y: y))
         }
@@ -98,12 +74,12 @@ class PlayingCardView: UIView {
 private extension PlayingCardView {
     private struct Constants {
         static let boundsHeight: CGFloat = 400
-        static let boundsWidth:  CGFloat = 250
-        static let scale:        CGFloat = 1.3
-        static let cardColor:    UIColor = .white
-        static let cornerRadius:    CGFloat = 0.08
+        static let boundsWidth: CGFloat = 250
+        static let scale: CGFloat = 1.3
+        static let cardColor: UIColor = .white
+        static let cornerRadius: CGFloat = 0.08
         static let thirdOffset: CGFloat = 110
-        static let offset:      CGFloat = 52
+        static let offset: CGFloat = 52
         static let borderColor: CGColor = UIColor.red.cgColor
     }
 
@@ -143,12 +119,14 @@ extension CGContext {
             color.setFill()
             self.fillPath()
         case .stripe:
-            guard let path = self.path else { return }
+            guard let path = self.path else {
+                return
+            }
             let outline = UIBezierPath(cgPath: path)
             self.addStripes()
 
             color.setStroke()
-            self.setLineWidth(lineWidth /  2)
+            self.setLineWidth(lineWidth / 2)
             self.strokePath()
             outline.lineWidth = lineWidth * 2
             outline.stroke()
