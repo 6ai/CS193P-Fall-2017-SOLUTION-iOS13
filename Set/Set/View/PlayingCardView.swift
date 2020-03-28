@@ -9,9 +9,29 @@
 import UIKit
 
 @IBDesignable
-class CardView: UIView {
+class PlayingCardView: UIView {
+    var card: PlayingCard = PlayingCard(color: .green, shape: .squiggle, number: .three, shading: .stripe) {
+        didSet {
+            setNeedsDisplay(); setNeedsLayout()
+        }
+    }
+    @IBInspectable
+    var isFaceUp: Bool = true {
+        didSet {
+            setNeedsDisplay(); setNeedsLayout()
+        }
+    }
 
-    lazy var card: Card = { Card(color: .green, shape: .squiggle, number: .three, shading: .stripe) }()
+    public var border = false {
+        didSet {
+            switch border {
+            case true:
+                addBorder()
+            case false:
+                removeBorder()
+            }
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -20,17 +40,23 @@ class CardView: UIView {
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+
         configure()
+
     }
 
-    convenience init(frame: CGRect, card: Card) {
+
+    convenience init(frame: CGRect, card: PlayingCard) {
         self.init(frame: frame)
         self.card = card
     }
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        addFigure()
+        if isFaceUp {
+            addFigures()
+        }
+
     }
 
     func addBorder() {
@@ -43,13 +69,24 @@ class CardView: UIView {
     }
 
     private func configure() {
-        backgroundColor = Constants.cardColor
+        backgroundColor = isFaceUp ? .white : .green
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
     }
 
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        backgroundColor = isFaceUp ? .white : .green
+    }
 
-    private func addFigure() {
+    private func roundView() {
+        let roundedRect = UIBezierPath(roundedRect: self.frame, cornerRadius: cornerRadius)
+        Constants.cardColor.setFill()
+        roundedRect.addClip()
+        roundedRect.fill()
+    }
+
+    private func addFigures() {
         guard let context = UIGraphicsGetCurrentContext() else { return }
         for (x, y) in coordinatesOfShapes {
             context.createFigurePath(figure: card.shape, scale: self.scale, translate: (x: x, y: y))
@@ -58,13 +95,13 @@ class CardView: UIView {
     }
 }
 
-private extension CardView {
+private extension PlayingCardView {
     private struct Constants {
         static let boundsHeight: CGFloat = 400
         static let boundsWidth:  CGFloat = 250
         static let scale:        CGFloat = 1.3
         static let cardColor:    UIColor = .white
-        static let cornerRadius:    CGFloat = 0.06
+        static let cornerRadius:    CGFloat = 0.08
         static let thirdOffset: CGFloat = 110
         static let offset:      CGFloat = 52
         static let borderColor: CGColor = UIColor.red.cgColor
@@ -100,7 +137,7 @@ private extension CardView {
 // MARK: CGContext
 extension CGContext {
 
-    func fillFigure(shading: Card.Shading, color: UIColor, lineWidth: CGFloat) {
+    func fillFigure(shading: PlayingCard.Shading, color: UIColor, lineWidth: CGFloat) {
         switch shading {
         case .solid:
             color.setFill()
@@ -122,7 +159,7 @@ extension CGContext {
         }
     }
 
-    func createFigurePath(figure: Card.Shape, scale: CGFloat, translate: (x: CGFloat, y: CGFloat)) {
+    func createFigurePath(figure: PlayingCard.Shape, scale: CGFloat, translate: (x: CGFloat, y: CGFloat)) {
         // translate and scale the figure path
         self.saveGState()
         self.translateBy(x: translate.x, y: translate.y)

@@ -5,7 +5,7 @@
 
 import UIKit
 
-struct Card {
+struct PlayingCard {
     let color:   UIColor
     let shape:   Shape
     let number:  Number
@@ -25,7 +25,7 @@ struct Card {
 
 }
 
-extension Card: Hashable {
+extension PlayingCard: Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(color)
@@ -34,7 +34,7 @@ extension Card: Hashable {
         hasher.combine(shading)
     }
 
-    static func ==(lhs: Card, rhs: Card) -> Bool {
+    static func ==(lhs: PlayingCard, rhs: PlayingCard) -> Bool {
         if lhs.color != rhs.color {
             return false
         }

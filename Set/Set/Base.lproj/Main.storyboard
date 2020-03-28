@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
-    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -15,52 +15,50 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Score: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ECg-m5-tVD">
-                                <rect key="frame" x="0.0" y="44" width="414" height="40"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="ugv-XQ-D2l"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="RSb-f9-L45">
-                                <rect key="frame" x="16" y="806" width="382" height="40"/>
-                                <color key="backgroundColor" systemColor="systemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="40" id="SO5-sn-UCM"/>
-                                </constraints>
-                            </stackView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bog-La-gCX">
-                                <rect key="frame" x="4" y="88" width="406" height="758"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bog-La-gCX" customClass="PlayingTableView" customModule="Set" customModuleProvider="target">
+                                <rect key="frame" x="4" y="48" width="406" height="709"/>
+                                <color key="backgroundColor" systemColor="systemIndigoColor" red="0.34509803919999998" green="0.33725490200000002" blue="0.83921568629999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <gestureRecognizers/>
                             </view>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="dX3-J7-Our">
+                                <rect key="frame" x="8" y="765" width="398" height="80"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gl6-OL-GAE" customClass="StackOfCardsView" customModule="Set" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="189" height="80"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UWh-vu-VEN" customClass="StackOfCardsView" customModule="Set" customModuleProvider="target">
+                                        <rect key="frame" x="209" y="0.0" width="189" height="80"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="80" id="t0k-s9-bIX"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="0.11237881922259588" green="0.18533262591196989" blue="0.38386342005076146" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.76668513407160122" green="0.76816307106598991" blue="0.71315575061316905" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="bog-La-gCX" firstAttribute="top" secondItem="ECg-m5-tVD" secondAttribute="bottom" constant="4" id="1hL-yT-L1i"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="RSb-f9-L45" secondAttribute="bottom" constant="16" id="3W2-Gp-hEB"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="RSb-f9-L45" secondAttribute="trailing" constant="16" id="9O1-3b-0H1"/>
-                            <constraint firstItem="ECg-m5-tVD" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="JAc-9O-xIF"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ECg-m5-tVD" secondAttribute="trailing" id="Kdh-6N-Lgy"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bog-La-gCX" secondAttribute="trailing" constant="4" id="TPz-bg-oSS"/>
-                            <constraint firstItem="ECg-m5-tVD" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="XNe-hj-ecF"/>
-                            <constraint firstItem="bog-La-gCX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="4" id="gsW-SA-jCG"/>
-                            <constraint firstItem="RSb-f9-L45" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="16" id="uQ0-Ia-lxs"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="bog-La-gCX" secondAttribute="bottom" constant="16" id="zhU-db-t8W"/>
+                            <constraint firstItem="dX3-J7-Our" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="4wq-OX-ij9"/>
+                            <constraint firstItem="dX3-J7-Our" firstAttribute="top" secondItem="bog-La-gCX" secondAttribute="bottom" constant="8" id="Cuk-2U-Uo9"/>
+                            <constraint firstItem="dX3-J7-Our" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" constant="-17" id="VlB-ei-IZ4"/>
+                            <constraint firstItem="bog-La-gCX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="4" id="hCR-2r-f6Q"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bog-La-gCX" secondAttribute="trailing" constant="4" id="iFG-0j-clp"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="dX3-J7-Our" secondAttribute="trailing" constant="8" id="o9I-mW-vzz"/>
+                            <constraint firstItem="bog-La-gCX" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="4" id="tWp-xn-jZf"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
-                        <outlet property="scoreLabel" destination="ECg-m5-tVD" id="hmd-zJ-qIz"/>
+                        <outlet property="playingDeckView" destination="Gl6-OL-GAE" id="sOP-OG-Pyf"/>
+                        <outlet property="setCountButton" destination="UWh-vu-VEN" id="puZ-oF-xNQ"/>
+                        <outlet property="stackView" destination="dX3-J7-Our" id="SbT-z4-bvE"/>
                         <outlet property="tableView" destination="bog-La-gCX" id="nSp-pJ-5rK"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="133.33333333333334" y="125.89285714285714"/>
+            <point key="canvasLocation" x="111.59420289855073" y="122.54464285714285"/>
         </scene>
     </scenes>
 </document>
