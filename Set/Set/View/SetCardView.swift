@@ -1,15 +1,13 @@
 //
-//  PlayingCardView.swift
-//  Set
+//  Created by yasuhiko2 on 04/03/2020.
+//  Copyright © 2020 yasuhiko2. All rights reserved.
 //
-//  Created by nattle on 10/03/2020.
-//  Copyright © 2020 nattle. All rights reserved.
-//
+
 
 import UIKit
 
-class PlayingCardView: UIView {
-    var card: PlayingCard = PlayingCard(color: .green, shape: .squiggle, number: .three, shading: .stripe) {
+class SetCardView: UIView {
+    var card: SetCard = SetCard(color: .green, shape: .squiggle, number: .three, shading: .stripe) {
         didSet {
             setNeedsDisplay(); setNeedsLayout()
         }
@@ -17,7 +15,7 @@ class PlayingCardView: UIView {
     var isFaceUp: Bool = true { didSet { setNeedsDisplay(); setNeedsLayout() } }
     var isSelected: Bool = false { didSet { isSelected ? addBorder() : removeBorder() } }
 
-    convenience init(frame: CGRect = .zero, card: PlayingCard) {
+    convenience init(frame: CGRect = .zero, card: SetCard) {
         self.init(frame: frame)
         self.card = card
         configure()
@@ -44,13 +42,14 @@ class PlayingCardView: UIView {
 
     private func configure() {
         backgroundColor = isFaceUp ? .white : .green
-        layer.cornerRadius = cornerRadius
-        layer.masksToBounds = true
+
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = isFaceUp ? .white : .green
+        layer.cornerRadius =  bounds.size.height * Constants.cornerRadius
+        layer.masksToBounds = true
     }
 
     private func roundView() {
@@ -61,7 +60,7 @@ class PlayingCardView: UIView {
     }
 }
 
-private extension PlayingCardView {
+private extension SetCardView {
     private struct Constants {
         static let boundsHeight: CGFloat = 400
         static let boundsWidth: CGFloat = 250
@@ -103,7 +102,7 @@ private extension PlayingCardView {
 // MARK: CGContext
 extension CGContext {
 
-    func fillFigure(shading: PlayingCard.Shading, color: UIColor, lineWidth: CGFloat) {
+    func fillFigure(shading: SetCard.Shading, color: UIColor, lineWidth: CGFloat) {
         switch shading {
         case .solid:
             color.setFill()
@@ -124,7 +123,7 @@ extension CGContext {
         }
     }
 
-    func createFigurePath(figure: PlayingCard.Shape, scale: CGFloat, translate: (x: CGFloat, y: CGFloat)) {
+    func createFigurePath(figure: SetCard.Shape, scale: CGFloat, translate: (x: CGFloat, y: CGFloat)) {
         // translate and scale the figure path
         saveGState()
         translateBy(x: translate.x, y: translate.y)

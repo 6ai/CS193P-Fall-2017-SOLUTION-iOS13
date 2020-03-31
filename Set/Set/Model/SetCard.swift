@@ -1,11 +1,11 @@
 //
-// Created by nattle on 06/03/2020.
-// Copyright (c) 2020 Annette. All rights reserved.
+//  Created by yasuhiko2 on 04/03/2020.
+//  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
 import UIKit
 
-struct PlayingCard {
+struct SetCard {
     let color:   UIColor
     let shape:   Shape
     let number:  Number
@@ -25,7 +25,7 @@ struct PlayingCard {
 
 }
 
-extension PlayingCard: Hashable {
+extension SetCard: Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(color)
@@ -34,7 +34,7 @@ extension PlayingCard: Hashable {
         hasher.combine(shading)
     }
 
-    static func ==(lhs: PlayingCard, rhs: PlayingCard) -> Bool {
+    static func ==(lhs: SetCard, rhs: SetCard) -> Bool {
         if lhs.color != rhs.color {
             return false
         }

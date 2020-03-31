@@ -1,11 +1,12 @@
 //
-// Created by iloveass on 26/03/2020.
-// Copyright (c) 2020 Annette. All rights reserved.
+//  Created by yasuhiko2 on 04/03/2020.
+//  Copyright © 2020 yasuhiko2. All rights reserved.
 //
+
 
 import UIKit
 
-class PlayingCardBehavior: UIDynamicBehavior {
+class SetCardBehavior: UIDynamicBehavior {
     private lazy var collisionBehavior: UICollisionBehavior = {
         let behavior = UICollisionBehavior()
         behavior.translatesReferenceBoundsIntoBoundary = true

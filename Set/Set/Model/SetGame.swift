@@ -1,18 +1,18 @@
 //
-// Created by nattle on 06/03/2020.
-// Copyright (c) 2020 Annette. All rights reserved.
+//  Created by yasuhiko2 on 04/03/2020.
+//  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
 import Foundation
 
 struct SetGame {
 
-    private(set) var deck = PlayingDeck()
+    private(set) var deck = SetDeck()
     private(set) var matchedCount = 0
-    private(set) var takenCards: [PlayingCard] = []
-    private(set) var cardsOnTable: [PlayingCard] = []
-    private(set) var lastMatchedCards: [PlayingCard] = []
-    private(set) var lastAddedCard: [PlayingCard] = []
+    private(set) var takenCards: [SetCard] = []
+    private(set) var cardsOnTable: [SetCard] = []
+    private(set) var lastMatchedCards: [SetCard] = []
+    private(set) var lastAddedCard: [SetCard] = []
 
     init() {
         deck.shuffle()
@@ -57,7 +57,7 @@ struct SetGame {
         }
     }
 
-    mutating func takeCardFromTable(card: PlayingCard) {
+    mutating func takeCardFromTable(card: SetCard) {
         guard cardsOnTable.contains(card) else { return }
         lastAddedCard.removeAll()
         lastMatchedCards.removeAll()
@@ -70,7 +70,7 @@ struct SetGame {
         }
     }
 
-    mutating func discard(card: PlayingCard) {
+    mutating func discard(card: SetCard) {
         guard let indexOfCard = takenCards.firstIndex(of: card) else { return }
         lastAddedCard.removeAll()
         lastMatchedCards.removeAll()
