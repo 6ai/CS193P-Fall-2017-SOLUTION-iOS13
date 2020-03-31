@@ -12,8 +12,16 @@ class SetCardView: UIView {
             setNeedsDisplay(); setNeedsLayout()
         }
     }
-    var isFaceUp: Bool = true { didSet { setNeedsDisplay(); setNeedsLayout() } }
-    var isSelected: Bool = false { didSet { isSelected ? addBorder() : removeBorder() } }
+    var isFaceUp: Bool = true {
+        didSet {
+            setNeedsDisplay(); setNeedsLayout()
+        }
+    }
+    var isSelected: Bool = false {
+        didSet {
+            isSelected ? addBorder() : removeBorder()
+        }
+    }
 
     convenience init(frame: CGRect = .zero, card: SetCard) {
         self.init(frame: frame)
@@ -23,7 +31,9 @@ class SetCardView: UIView {
 
     override func draw(_ rect: CGRect) {
         super.draw(rect)
-        guard let context = UIGraphicsGetCurrentContext(), isFaceUp else { return }
+        guard let context = UIGraphicsGetCurrentContext(), isFaceUp else {
+            return
+        }
         for (x, y) in coordinatesOfShapes {
             context.createFigurePath(figure: card.shape, scale: self.scale, translate: (x: x, y: y))
         }
@@ -48,7 +58,7 @@ class SetCardView: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = isFaceUp ? .white : .green
-        layer.cornerRadius =  bounds.size.height * Constants.cornerRadius
+        layer.cornerRadius = bounds.size.height * Constants.cornerRadius
         layer.masksToBounds = true
     }
 
@@ -108,11 +118,13 @@ extension CGContext {
             color.setFill()
             fillPath()
         case .stripe:
-            guard let path = path else { return }
+            guard let path = path else {
+                return
+            }
             let outline = UIBezierPath(cgPath: path)
             addStripes()
             color.setStroke()
-            setLineWidth(lineWidth /  2)
+            setLineWidth(lineWidth / 2)
             strokePath()
             outline.lineWidth = lineWidth * 2
             outline.stroke()

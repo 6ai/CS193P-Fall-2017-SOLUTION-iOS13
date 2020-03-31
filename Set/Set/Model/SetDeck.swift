@@ -33,9 +33,13 @@ struct SetDeck {
     }
 
     mutating func draw(countOfCards number: Int) -> [SetCard]? {
-        guard number <= deck.count else { return nil }
+        guard number <= deck.count else {
+            return nil
+        }
         var cards = [SetCard]()
-        for _ in 1...number { cards.append(deck.popLast()!) }
+        for _ in 1...number {
+            cards.append(deck.popLast()!)
+        }
         return cards
     }
 }

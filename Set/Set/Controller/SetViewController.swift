@@ -24,7 +24,6 @@ class SetViewController: UIViewController, SetTableViewDelegate {
         return tableView
     }()
 
-
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -51,14 +50,18 @@ class SetViewController: UIViewController, SetTableViewDelegate {
         updateViewFromModel()
     }
 
-
-
     private func updateViewFromModel() {
         barInfo.dealButton.alpha = game.deck.isEmpty() ? 0 : 1
-        let matchedCards = setTableView.views.filter { game.lastMatchedCards.contains($0.card) }
+        let matchedCards = setTableView.views.filter {
+            game.lastMatchedCards.contains($0.card)
+        }
         setTableView.cards = game.cardsOnTable
-        setTableView.views.forEach { $0.isSelected = game.takenCards.contains($0.card) }
-        let needLayingOutCards = setTableView.views.filter { game.lastAddedCard.contains($0.card) }
+        setTableView.views.forEach {
+            $0.isSelected = game.takenCards.contains($0.card)
+        }
+        let needLayingOutCards = setTableView.views.filter {
+            game.lastAddedCard.contains($0.card)
+        }
 
         layingOutCardAnimation(needLayingOutCards)
         cardsAfterMatchedAnimation(matchedCards: matchedCards)
@@ -74,7 +77,6 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     private lazy var cardBehavior = SetCardBehavior(in: animator)
 
     private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
-        print(#function)
         let deckOriginCenter = barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
         let deckOriginFrame = CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
 
@@ -102,7 +104,6 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     }
 
     private func cardsAfterMatchedAnimation(matchedCards: [SetCardView]) {
-
         let setCountViewCenter = barInfo.convert(barInfo.setCountButton.frame.origin, to: setTableView)
         let setCountViewFrame = CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
 
@@ -119,14 +120,15 @@ class SetViewController: UIViewController, SetTableViewDelegate {
                         duration: 0.8,
                         options: [.transitionFlipFromLeft],
                         animations: { matchCard.isFaceUp = false },
-                        completion: { _ in self.barInfo.setCountButton.alpha = 1
+                        completion: { _ in
+                            self.barInfo.setCountButton.alpha = 1
                             matchCard.alpha = 0
                             self.barInfo.setCountButton.text = "\(self.game.matchedCount) Sets"
                         }
                 )
             }
 
-            let moveCardsToStackOfCardsAnimation: (Bool) -> ()  = { _ in
+            let moveCardsToStackOfCardsAnimation: (Bool) -> () = { _ in
                 UIViewPropertyAnimator.runningPropertyAnimator(
                         withDuration: 0.5,
                         delay: 0.1,
@@ -144,7 +146,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
                         with: matchCard,
                         duration: 0.2,
                         animations: { horizontalRotationCardAnimation() },
-                        completion: moveCardsToStackOfCardsAnimation )
+                        completion: moveCardsToStackOfCardsAnimation)
             })
         }
     }

@@ -6,9 +6,9 @@
 import UIKit
 
 struct SetCard {
-    let color:   UIColor
-    let shape:   Shape
-    let number:  Number
+    let color: UIColor
+    let shape: Shape
+    let number: Number
     let shading: Shading
 
     enum Shape: CaseIterable {

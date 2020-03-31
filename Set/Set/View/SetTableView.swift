@@ -11,7 +11,11 @@ protocol SetTableViewDelegate {
 
 class SetTableView: UIView {
     private(set) var frameGrid = Grid(layout: .aspectRatio(CardLayout.aspectRatio))
-    var cards: [SetCard] = [] { didSet { recalculate() } }
+    var cards: [SetCard] = [] {
+        didSet {
+            recalculate()
+        }
+    }
     private(set) var views: [SetCardView] = []
     var delegate: SetTableViewDelegate!
 
@@ -41,7 +45,9 @@ class SetTableView: UIView {
         clearTableViewFromSubviews()
         frameGrid.frame = bounds
         frameGrid.cellCount = cards.count
-        while cards.count < views.count { views.removeLast() }
+        while cards.count < views.count {
+            views.removeLast()
+        }
         for index in cards.indices {
             let card = cards[index]
             let cellFrame = frameGrid[index]!.narrowDown(by: CardLayout.spacingBetweenCards)
@@ -57,7 +63,9 @@ class SetTableView: UIView {
     }
 
     @objc func clickOnCardView(_ recognizer: UITapGestureRecognizer) {
-        guard let cardView = recognizer.view as? SetCardView else { return }
+        guard let cardView = recognizer.view as? SetCardView else {
+            return
+        }
         delegate.clickOnCard(card: cardView.card)
     }
 
@@ -67,7 +75,9 @@ class SetTableView: UIView {
     }
 
     func clearTableViewFromSubviews() {
-        subviews.forEach { $0.removeFromSuperview() }
+        subviews.forEach {
+            $0.removeFromSuperview()
+        }
     }
 }
 
