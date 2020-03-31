@@ -36,10 +36,10 @@ struct SetDeck {
         guard number <= deck.count else {
             return nil
         }
-        var cards = [SetCard]()
+        var drawCards: [SetCard] = []
         for _ in 1...number {
-            cards.append(deck.popLast()!)
+            drawCards.append(deck.popLast()!)
         }
-        return cards
+        return drawCards
     }
 }

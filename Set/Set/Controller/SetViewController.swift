@@ -6,7 +6,6 @@
 import UIKit
 
 class SetViewController: UIViewController, SetTableViewDelegate {
-
     private var game = SetGame()
 
     private let barInfo: BarInfo = {
