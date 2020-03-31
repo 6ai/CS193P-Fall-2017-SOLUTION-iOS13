@@ -1,98 +1,81 @@
 //
-// Created by iloveass on 23/03/2020.
-// Copyright (c) 2020 Annette. All rights reserved.
+// Created by yasuhiko2 on 23/03/2020.
+// Copyright (c) 2020 yasuhiko2. All rights reserved.
 //
 
 import UIKit
 
+protocol PlayingTableViewDelegate {
+    func clickOnCard(card: PlayingCard)
+}
+
 class PlayingTableView: UIView {
-    private(set) var tableCardsLayout: [TableCard] = []
-    var tableViewGrid = Grid(layout: .aspectRatio(CardLayout.cardRatio))
+    private(set) var frameGrid = Grid(layout: .aspectRatio(CardLayout.aspectRatio))
+    var cards: [PlayingCard] = [] { didSet { recalculate() } }
+    private(set) var views: [PlayingCardView] = []
+    var delegate: PlayingTableViewDelegate!
 
-    var tableCards: [PlayingCard] = [] {
-        didSet { recalculate() }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        frameGrid.frame = frame
     }
-    private func recalculate() {
+
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        frameGrid.frame = frame
+    }
+
+    subscript(index: Int) -> PlayingCardView {
+        get {
+            assert(index < views.count, "Index out of range")
+            return views[index]
+        }
+        set(newValue) {
+            assert(index < views.count, "Index out of range")
+            views[index] = newValue
+            recalculate()
+        }
+    }
+
+    func recalculate() {
+        print(#function)
         clearTableViewFromSubviews()
-        tableViewGrid.cellCount = tableCards.count
-        tableCardsLayout.removeAll(where: {
-            switch $0.stat {
-            case .deleted:
-                return true
-            default:
-                return false
-            }
-        })
-
-
-        if tableCardsLayout.count > tableCards.count {
-            for index in tableCardsLayout.indices {
-                let cardOnTable = tableCardsLayout[index].view.card
-                if !tableCards.contains(cardOnTable) {
-                    tableCardsLayout[index].stat = .deleted
-                }
-            }
-        }
-
-        for index in tableCards.indices {
-            let newCard = tableCards[index]
-            let newCellFrame = tableViewGrid[index]?.narrowDown(by: CardLayout.spacingBetweenCards) ?? CGRect.zero
-            let newCardView = PlayingCardView(frame: newCellFrame, card: newCard)
-            if index >= tableCardsLayout.count {
-                tableCardsLayout.append(TableCard(view: newCardView, stat: .newCardFromDeck))
-                continue
-            }
-            let cardOnTableView = tableCardsLayout[index].view
-            if newCard != cardOnTableView.card {
-                cardOnTableView.removeFromSuperview()
-                tableCardsLayout[index].stat = .matchedCard(cardOnTableView)
-                tableCardsLayout[index].view = newCardView
-            } else {
-                tableCardsLayout[index].stat = .updateFrame(newCellFrame)
-            }
+        frameGrid.frame = bounds
+        frameGrid.cellCount = cards.count
+        while cards.count < views.count { views.removeLast() }
+        for index in cards.indices {
+            let card = cards[index]
+            let cellFrame = frameGrid[index]!.narrowDown(by: CardLayout.spacingBetweenCards)
+            let lastFrame = (index < views.count) ? views[index].frame : cellFrame
+            let cardView = PlayingCardView(frame: lastFrame, card: card)
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 1, delay: 0, animations: { cardView.frame = cellFrame })
+            cardView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(clickOnCardView)))
+            addSubview(cardView)
+            (index < views.count) ? (views[index] = cardView) : views.append(cardView)
         }
     }
 
-    subscript(index: Int) -> TableCard? {
-        return index < tableCardsLayout.count ? tableCardsLayout[index] : nil
+    @objc func clickOnCardView(_ recognizer: UITapGestureRecognizer) {
+        guard let cardView = recognizer.view as? PlayingCardView else { return }
+        delegate.clickOnCard(card: cardView.card)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+//        recalculate()
+        print(#function)
     }
 
     func clearTableViewFromSubviews() {
         subviews.forEach { $0.removeFromSuperview() }
     }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        tableViewGrid.frame = bounds
-    }
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        tableViewGrid.frame = frame
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        tableViewGrid.frame = frame
-    }
 }
 
 extension PlayingTableView {
     private struct CardLayout {
-        static let cardRatio: CGFloat = 5 / 8
+        static let aspectRatio: CGFloat = 5 / 8
         static let spacingBetweenCards: CGFloat = 5
-    }
-
-    enum PlayingCardStatOnTable {
-        case matchedCard(PlayingCardView)
-        case updateFrame(CGRect)
-        case newCardFromDeck
-        case deleted
-    }
-
-    struct TableCard {
-        var view: PlayingCardView
-        var stat: PlayingCardStatOnTable
     }
 }
 

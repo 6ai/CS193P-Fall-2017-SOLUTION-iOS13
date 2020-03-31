@@ -1,16 +1,11 @@
 //
-//  ViewController.swift
-//  Set
-//
-//  Created by nattle on 04/03/2020.
-//  Copyright © 2020 Annette. All rights reserved.
+//  Created by yasuhiko2 on 04/03/2020.
+//  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
 import UIKit
 
-
-class ViewController: UIViewController {
-    // todo Create barInfo
+class ViewController: UIViewController, PlayingTableViewDelegate {
     @IBOutlet weak var playingDeckView: StackOfCardsView! {
         didSet {
             playingDeckView.text = "Deal"
@@ -21,11 +16,15 @@ class ViewController: UIViewController {
         game.addCardsOnTable(countOfCards: 3)
         updateViewFromModel()
     }
-    @IBOutlet weak var setCountButton: StackOfCardsView!
+    @IBOutlet weak var setCountButton: StackOfCardsView! {
+        didSet {
+            setCountButton.alpha = 0
+        }
+    }
     @IBOutlet weak var stackView: UIView!
 
     private var game = SetGame()
-    @IBOutlet weak var tableView: PlayingTableView!
+    @IBOutlet weak var tableView: PlayingTableView! { didSet { tableView.delegate = self } }
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -33,56 +32,26 @@ class ViewController: UIViewController {
     }
 
     private func updateViewFromModel() {
-        tableView.tableCards = game.cardsOnTable
-        var matchedCards: [PlayingCardView] = []
-        var needLayingOutCards: [PlayingCardView] = []
-
-        for index in tableView.tableCardsLayout.indices {
-            var cardOnTable = tableView.tableCardsLayout[index]
-            switch cardOnTable.stat {
-            case .matchedCard(let matchedCardView):
-                matchedCardView.isSelected = false
-                matchedCards.append(matchedCardView)
-                needLayingOutCards.append(cardOnTable.view)
-            case .updateFrame(let newFrame):
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: 1, delay: 0, animations: { cardOnTable.view.frame = newFrame })
-            case .newCardFromDeck:
-                needLayingOutCards.append(cardOnTable.view)
-            case .deleted:
-                matchedCards.append(cardOnTable.view)
-            }
-            cardOnTable.view.isSelected = game.takenCards.contains(cardOnTable.view.card)
-            tableView.addSubview(cardOnTable.view)
-            cardOnTable.view.addGestureRecognizer(UITapGestureRecognizer(
-                    target: self, action: #selector(clickOnCardView)))
-        }
+        playingDeckView.alpha = game.deck.isEmpty() ? 0 : 1
+        let matchedCards = tableView.views.filter { game.lastMatchedCards.contains($0.card) }
+        tableView.cards = game.cardsOnTable
+        tableView.views.forEach { $0.isSelected = game.takenCards.contains($0.card) }
+        let needLayingOutCards = tableView.views.filter { game.lastAddedCard.contains($0.card) }
         layingOutCardAnimation(needLayingOutCards)
-
-        if matchedCards.count == 3 {
-            cardsAfterMatchedAnimation(matchedCards: matchedCards)
-        }
-
+        cardsAfterMatchedAnimation(matchedCards: matchedCards)
     }
 
-
-    @objc private func clickOnCardView(_ recognizer: UITapGestureRecognizer) {
-        guard let cardView = recognizer.view as? PlayingCardView else { return }
-        let card = cardView.card
-        if game.takenCards.contains(card) {
-            game.discardHandCard(card: card)
-        } else {
-            game.takeCardFromTable(card: card)
-        }
+    func clickOnCard(card: PlayingCard) {
+        game.takenCards.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
         updateViewFromModel()
     }
 
-
     // Mark: Dynamic Animator
-    lazy var animator = UIDynamicAnimator(referenceView: tableView)
-    lazy var cardBehavior = PlayingCardBehavior(in: animator)
+    private lazy var animator = UIDynamicAnimator(referenceView: tableView)
+    private lazy var cardBehavior = PlayingCardBehavior(in: animator)
 
-    func layingOutCardAnimation(_ cardViews: [PlayingCardView]) {
+    private func layingOutCardAnimation(_ cardViews: [PlayingCardView]) {
+        print(#function)
         let deckOriginCenter = stackView.convert(playingDeckView.frame.origin, to: tableView)
         let deckOriginFrame = CGRect(origin: deckOriginCenter, size: playingDeckView.frame.size)
 
@@ -109,13 +78,14 @@ class ViewController: UIViewController {
         }
     }
 
-    func cardsAfterMatchedAnimation(matchedCards: [PlayingCardView]) {
-        assert(matchedCards.count == 3, "flyawayAnimation: matchedCards must be contains 3 cards not \(matchedCards.count)")
+    private func cardsAfterMatchedAnimation(matchedCards: [PlayingCardView]) {
+        print(#function)
 
         let setCountViewCenter = stackView.convert(setCountButton.frame.origin, to: tableView)
         let setCountViewFrame = CGRect(origin: setCountViewCenter, size: playingDeckView.frame.size)
 
         for matchCard in matchedCards {
+            matchCard.isSelected = false
             let horizontalRotationCardAnimation = {
                 matchCard.transform = CGAffineTransform.identity.rotated(by: CGFloat.pi / 2)
             }
@@ -133,7 +103,7 @@ class ViewController: UIViewController {
                 )
             }
 
-            let moveCardsOnStackOfCardsAnimation: (Bool) -> ()  = { _ in
+            let moveCardsToStackOfCardsAnimation: (Bool) -> ()  = { _ in
                 UIViewPropertyAnimator.runningPropertyAnimator(
                         withDuration: 0.5,
                         delay: 0.1,
@@ -150,7 +120,7 @@ class ViewController: UIViewController {
                         with: matchCard,
                         duration: 0.2,
                         animations: { horizontalRotationCardAnimation() },
-                        completion: moveCardsOnStackOfCardsAnimation )
+                        completion: moveCardsToStackOfCardsAnimation )
             })
         }
     }

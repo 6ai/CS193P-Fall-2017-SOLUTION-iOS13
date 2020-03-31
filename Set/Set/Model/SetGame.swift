@@ -7,15 +7,17 @@ import Foundation
 
 struct SetGame {
 
-    private var deck = PlayingDeck()
+    private(set) var deck = PlayingDeck()
     private(set) var matchedCount = 0
     private(set) var takenCards: [PlayingCard] = []
     private(set) var cardsOnTable: [PlayingCard] = []
     private(set) var lastMatchedCards: [PlayingCard] = []
+    private(set) var lastAddedCard: [PlayingCard] = []
 
     init() {
         deck.shuffle()
         cardsOnTable = deck.draw(countOfCards: 12)!
+        lastAddedCard = cardsOnTable
     }
 
     func isChosenCardsContainsSet() -> Bool {
@@ -31,7 +33,9 @@ struct SetGame {
     }
 
     mutating func addCardsOnTable(countOfCards: Int) {
-        guard let drawCards = deck.draw(countOfCards: countOfCards) else { return }
+        guard let drawCards = deck.draw(countOfCards: countOfCards) else {
+            lastAddedCard.removeAll(); return }
+        lastAddedCard = drawCards
         cardsOnTable = cardsOnTable + drawCards
     }
 
@@ -40,10 +44,12 @@ struct SetGame {
     }
 
     mutating func clearTableFromTakenCards() {
+        lastAddedCard.removeAll()
         for card in takenCards {
             if let cardIndexOnTable = cardsOnTable.firstIndex(of: card) {
                 if let drawCards = deck.draw(countOfCards: 1) {
                     cardsOnTable[cardIndexOnTable] = drawCards[0]
+                    lastAddedCard.append(cardsOnTable[cardIndexOnTable])
                 } else {
                     cardsOnTable.remove(at: cardIndexOnTable)
                 }
@@ -53,6 +59,8 @@ struct SetGame {
 
     mutating func takeCardFromTable(card: PlayingCard) {
         guard cardsOnTable.contains(card) else { return }
+        lastAddedCard.removeAll()
+        lastMatchedCards.removeAll()
         takenCards.append(card)
         if isChosenCardsContainsSet() {
             matchedCount += 1
@@ -62,8 +70,10 @@ struct SetGame {
         }
     }
 
-    mutating func discardHandCard(card: PlayingCard) {
+    mutating func discard(card: PlayingCard) {
         guard let indexOfCard = takenCards.firstIndex(of: card) else { return }
+        lastAddedCard.removeAll()
+        lastMatchedCards.removeAll()
         takenCards.remove(at: indexOfCard)
     }
 }

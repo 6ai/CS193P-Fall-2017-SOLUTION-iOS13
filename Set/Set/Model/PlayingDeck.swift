@@ -10,7 +10,7 @@ struct PlayingDeck {
 
     init() {
         self.deck = []
-        let cardColors: [UIColor] = [.red/*, .blue, .purple*/]
+        let cardColors: [UIColor] = [.purple/*, .blue, .purple*/]
 
         for color in cardColors {
             for shape in PlayingCard.Shape.allCases {
@@ -26,6 +26,10 @@ struct PlayingDeck {
 
     mutating func shuffle() {
         deck.shuffle()
+    }
+
+    func isEmpty() -> Bool {
+        return deck.isEmpty
     }
 
     mutating func draw(countOfCards number: Int) -> [PlayingCard]? {
