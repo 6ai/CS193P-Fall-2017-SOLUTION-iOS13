@@ -9,25 +9,35 @@ struct SetGame {
 
     private(set) var deck = SetDeck()
     private(set) var matchedCount = 0
-    private(set) var takenCards: [SetCard] = []
-    private(set) var cardsOnTable: [SetCard] = []
-    private(set) var lastMatchedCards: [SetCard] = []
+    private(set) var cardOnHands: [SetCard] = []
+    private(set) var cardOnTable: [SetCard] = []
+    private(set) var lastMatchedCard: [SetCard] = []
     private(set) var lastAddedCard: [SetCard] = []
 
     init() {
         deck.shuffle()
-        cardsOnTable = deck.draw(countOfCards: 12)!
-        lastAddedCard = cardsOnTable
+        cardOnTable = deck.draw(countOfCards: 12)!
+        lastAddedCard = cardOnTable
     }
 
     func isChosenCardsContainsSet() -> Bool {
-        guard takenCards.count == 3 else { return false }
+        guard cardOnHands.count == 3 else {
+            return false
+        }
         return true // debug return todo remove
 
-        let colors: Set = [takenCards.map { $0.color }]
-        let shapes: Set = [takenCards.map { $0.shape }]
-        let numbers: Set = [takenCards.map { $0.number }]
-        let shadings: Set = [takenCards.map { $0.shading }]
+        let colors: Set = [cardOnHands.map {
+            $0.color
+        }]
+        let shapes: Set = [cardOnHands.map {
+            $0.shape
+        }]
+        let numbers: Set = [cardOnHands.map {
+            $0.number
+        }]
+        let shadings: Set = [cardOnHands.map {
+            $0.shading
+        }]
 
         return colors.count != 2 && shapes.count != 2 && numbers.count != 2 && shadings.count != 2
     }
@@ -36,45 +46,49 @@ struct SetGame {
         guard let drawCards = deck.draw(countOfCards: countOfCards) else {
             lastAddedCard.removeAll(); return }
         lastAddedCard = drawCards
-        cardsOnTable = cardsOnTable + drawCards
+        cardOnTable = cardOnTable + drawCards
     }
 
     mutating func reshuffleCardsOnTable() {
-        cardsOnTable.shuffle()
+        cardOnTable.shuffle()
     }
 
     mutating func clearTableFromTakenCards() {
         lastAddedCard.removeAll()
-        for card in takenCards {
-            if let cardIndexOnTable = cardsOnTable.firstIndex(of: card) {
+        for card in cardOnHands {
+            if let cardIndexOnTable = cardOnTable.firstIndex(of: card) {
                 if let drawCards = deck.draw(countOfCards: 1) {
-                    cardsOnTable[cardIndexOnTable] = drawCards[0]
-                    lastAddedCard.append(cardsOnTable[cardIndexOnTable])
+                    cardOnTable[cardIndexOnTable] = drawCards[0]
+                    lastAddedCard.append(cardOnTable[cardIndexOnTable])
                 } else {
-                    cardsOnTable.remove(at: cardIndexOnTable)
+                    cardOnTable.remove(at: cardIndexOnTable)
                 }
             }
         }
     }
 
     mutating func takeCardFromTable(card: SetCard) {
-        guard cardsOnTable.contains(card) else { return }
+        guard cardOnTable.contains(card) else {
+            return
+        }
         lastAddedCard.removeAll()
-        lastMatchedCards.removeAll()
-        takenCards.append(card)
+        lastMatchedCard.removeAll()
+        cardOnHands.append(card)
         if isChosenCardsContainsSet() {
             matchedCount += 1
             clearTableFromTakenCards()
-            lastMatchedCards = takenCards
-            takenCards.removeAll()
+            lastMatchedCard = cardOnHands
+            cardOnHands.removeAll()
         }
     }
 
     mutating func discard(card: SetCard) {
-        guard let indexOfCard = takenCards.firstIndex(of: card) else { return }
+        guard let indexOfCard = cardOnHands.firstIndex(of: card) else {
+            return
+        }
         lastAddedCard.removeAll()
-        lastMatchedCards.removeAll()
-        takenCards.remove(at: indexOfCard)
+        lastMatchedCard.removeAll()
+        cardOnHands.remove(at: indexOfCard)
     }
 }
 

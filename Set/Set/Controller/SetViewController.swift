@@ -52,11 +52,11 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     private func updateViewFromModel() {
         barInfo.dealButton.alpha = game.deck.isEmpty() ? 0 : 1
         let matchedCards = setTableView.views.filter {
-            game.lastMatchedCards.contains($0.card)
+            game.lastMatchedCard.contains($0.card)
         }
-        setTableView.cards = game.cardsOnTable
+        setTableView.cards = game.cardOnTable
         setTableView.views.forEach {
-            $0.isSelected = game.takenCards.contains($0.card)
+            $0.isSelected = game.cardOnHands.contains($0.card)
         }
         let needLayingOutCards = setTableView.views.filter {
             game.lastAddedCard.contains($0.card)
@@ -67,7 +67,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     }
 
     func clickOnCard(card: SetCard) {
-        game.takenCards.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
+        game.cardOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
         updateViewFromModel()
     }
 
