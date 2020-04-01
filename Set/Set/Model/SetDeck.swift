@@ -10,9 +10,8 @@ struct SetDeck {
 
     init() {
         self.deck = []
-        let cardColors: [UIColor] = [.red, .blue, .purple]
 
-        for color in cardColors {
+        for color in SetCard.Color.allCases {
             for shape in SetCard.Shape.allCases {
                 for shading in SetCard.Shading.allCases {
                     for number in SetCard.Number.allCases {

@@ -9,7 +9,7 @@ class BarInfo: UIStackView {
     let dealButton: UILabel = {
         let btn = UILabel()
         btn.attributedText = centeredAttributedString("Deal", fontSize: 32)
-        btn.backgroundColor = .systemPink
+        btn.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         btn.layer.cornerRadius = btn.bounds.height * 0.08
         btn.layer.masksToBounds = true
 
@@ -18,7 +18,7 @@ class BarInfo: UIStackView {
 
     let setCountButton: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .systemPink
+        label.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         label.alpha = 0
         label.attributedText = centeredAttributedString("Stack", fontSize: 32)
         label.layer.masksToBounds = true

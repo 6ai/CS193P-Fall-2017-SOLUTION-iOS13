@@ -7,7 +7,7 @@
 import UIKit
 
 class SetCardView: UIView {
-    var card: SetCard = SetCard(color: .green, shape: .squiggle, number: .three, shading: .stripe) {
+    var card: SetCard = SetCard(color: .variant1, shape: .squiggle, number: .three, shading: .stripe) {
         didSet {
             setNeedsDisplay(); setNeedsLayout()
         }
@@ -37,7 +37,8 @@ class SetCardView: UIView {
         for (x, y) in coordinatesOfShapes {
             context.createFigurePath(figure: card.shape, scale: self.scale, translate: (x: x, y: y))
         }
-        context.fillFigure(shading: card.shading, color: card.color, lineWidth: lineWidth)
+
+        context.fillFigure(shading: card.shading, color: card.color.value, lineWidth: lineWidth)
     }
 
 
@@ -51,13 +52,13 @@ class SetCardView: UIView {
     }
 
     private func configure() {
-        backgroundColor = isFaceUp ? .white : .green
+        backgroundColor = isFaceUp ? .white : #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
 
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundColor = isFaceUp ? .white : .green
+        backgroundColor = isFaceUp ? .white : #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         layer.cornerRadius = bounds.size.height * Constants.cornerRadius
         layer.masksToBounds = true
     }

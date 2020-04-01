@@ -17,7 +17,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
 
     private let setTableView: SetTableView = {
         let tableView = SetTableView()
-        tableView.backgroundColor = .placeholderText
+        tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
         return tableView
@@ -27,7 +27,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
         super.viewDidLoad()
 
         // todo move
-        view.backgroundColor = .lightGray
+        view.backgroundColor = #colorLiteral(red: 0.478271801, green: 0.4424946756, blue: 0.6212127221, alpha: 0.6511932791)
         let tap = UITapGestureRecognizer(target: self, action: #selector(layingOutThreeCardsOnTable))
         barInfo.addGestureRecognizer(tap)
 
@@ -45,6 +45,9 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     }
 
     @objc private func layingOutThreeCardsOnTable() {
+        guard game.cardOnTable.count <= 21 else {
+            return
+        }
         game.addCardsOnTable(countOfCards: 3)
         updateViewFromModel()
     }
@@ -56,7 +59,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
         }
         setTableView.cards = game.cardOnTable
         setTableView.views.forEach {
-            $0.isSelected = game.cardOnHands.contains($0.card)
+            $0.isSelected = game.cardsOnHands.contains($0.card)
         }
         let needLayingOutCards = setTableView.views.filter {
             game.lastAddedCard.contains($0.card)
@@ -67,7 +70,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     }
 
     func clickOnCard(card: SetCard) {
-        game.cardOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
+        game.cardsOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
         updateViewFromModel()
     }
 

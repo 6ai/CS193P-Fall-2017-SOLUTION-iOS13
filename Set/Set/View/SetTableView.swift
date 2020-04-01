@@ -71,7 +71,6 @@ class SetTableView: UIView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        print(#function)
     }
 
     func clearTableViewFromSubviews() {

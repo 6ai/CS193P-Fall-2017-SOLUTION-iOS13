@@ -6,7 +6,7 @@
 import UIKit
 
 struct SetCard {
-    let color: UIColor
+    let color: Color
     let shape: Shape
     let number: Number
     let shading: Shading
@@ -21,6 +21,20 @@ struct SetCard {
 
     enum Number: CaseIterable {
         case one, two, three
+    }
+
+    enum Color: CaseIterable {
+        case variant1, variant2, variant3
+        var value: UIColor {
+            switch self {
+            case .variant1:
+                return UIColor.red
+            case .variant3:
+                return UIColor.green
+            case .variant2:
+                return UIColor.blue
+            }
+        }
     }
 
 }
