@@ -5,7 +5,7 @@
 
 import UIKit
 
-class SetViewController: UIViewController, SetTableViewDelegate {
+class SetViewController: UIViewController {
     private var game = SetGame()
 
     private let barInfo: BarInfo = {
@@ -69,10 +69,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
         cardsAfterMatchedAnimation(matchedCards: matchedCards)
     }
 
-    func clickOnCard(card: SetCard) {
-        game.cardsOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
-        updateViewFromModel()
-    }
+
 
     // Mark: Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
@@ -173,4 +170,11 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     }
 }
 
+// Mark: - SetTableViewDelegate
+extension SetViewController: SetTableViewDelegate {
+    func clickOnCard(card: SetCard) {
+        game.cardsOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
+        updateViewFromModel()
+    }
+}
 
