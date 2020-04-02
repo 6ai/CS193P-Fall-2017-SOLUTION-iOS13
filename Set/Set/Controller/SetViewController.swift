@@ -45,9 +45,6 @@ class SetViewController: UIViewController {
     }
 
     @objc private func layingOutThreeCardsOnTable() {
-        guard game.cardOnTable.count <= 21 else {
-            return
-        }
         game.addCardsOnTable(countOfCards: 3)
         updateViewFromModel()
     }
@@ -71,7 +68,7 @@ class SetViewController: UIViewController {
 
 
 
-    // Mark: Dynamic Animator
+    // MARK: Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
     private lazy var cardBehavior = SetCardBehavior(in: animator)
 
@@ -150,7 +147,7 @@ class SetViewController: UIViewController {
         }
     }
 
-    // Mark: Autolayout
+    // MARK: Autolayout
     private func setupLayout() {
         let safeGuide = view.safeAreaLayoutGuide
 
@@ -170,7 +167,7 @@ class SetViewController: UIViewController {
     }
 }
 
-// Mark: - SetTableViewDelegate
+// MARK: - SetTableViewDelegate
 extension SetViewController: SetTableViewDelegate {
     func clickOnCard(card: SetCard) {
         game.cardsOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
