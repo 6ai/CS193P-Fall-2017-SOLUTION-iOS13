@@ -7,6 +7,7 @@
 import UIKit
 
 class SetCardView: UIView {
+
     var card: SetCard = SetCard(color: .variant1, shape: .squiggle, number: .three, shading: .stripe) {
         didSet {
             setNeedsDisplay(); setNeedsLayout()
@@ -53,18 +54,19 @@ class SetCardView: UIView {
 
     private func configure() {
         backgroundColor = isFaceUp ? SizeRatioOfOriginSetCard.cardColor : SizeRatioOfOriginSetCard.backColor
-        layer.cornerRadius = bounds.size.height * SizeRatioOfOriginSetCard.cornerRadius
+
+        layer.cornerRadius = cornerRadius
         layer.borderColor = /*isSelected ? */SizeRatioOfOriginSetCard.borderColor /*: .none*/
         layer.masksToBounds = true
     }
 }
 
-private extension SetCardView {
+extension SetCardView {
 
-    struct SizeRatioOfOriginSetCard {
+    private struct SizeRatioOfOriginSetCard {
         static let boundsHeight: CGFloat = 400
         static let boundsWidth: CGFloat = 250
-        static let cornerRadius: CGFloat = 0.08
+        static let cornerRadiusCoefficient: CGFloat = 0.08
         static let cardColor: UIColor = UIColor.white
         static let borderColor: CGColor = UIColor.red.cgColor
         static let backColor: UIColor = UIColor.systemPink
@@ -72,24 +74,24 @@ private extension SetCardView {
         static let scale: CGFloat = 1.3
     }
 
-    struct CenterOffsetForLayoutShapes {
+    private struct CenterOffsetForLayoutShapes {
         static let threeShapesOnCard: CGFloat = 110
         static let twoShapesOnCard: CGFloat = 52
     }
 
-    var scaleLineWidth: CGFloat {
+    private var scaleLineWidth: CGFloat {
         return scale * SizeRatioOfOriginSetCard.lineWidth
     }
 
-    var scale: CGFloat {
+    private var scale: CGFloat {
         return SizeRatioOfOriginSetCard.scale * bounds.size.height / SizeRatioOfOriginSetCard.boundsHeight
     }
 
-    var cornerRadius: CGFloat {
-        return bounds.size.height * SizeRatioOfOriginSetCard.cornerRadius
+    private var cornerRadius: CGFloat {
+        return bounds.size.height * SizeRatioOfOriginSetCard.cornerRadiusCoefficient
     }
 
-    var coordinatesForShapesLayout: [(dx: CGFloat, dy: CGFloat)] {
+    private var coordinatesForShapesLayout: [(dx: CGFloat, dy: CGFloat)] {
         switch card.number {
         case .one:
             return [(bounds.midX, bounds.midY)]
@@ -176,13 +178,21 @@ extension CGContext {
 
     private func createSquigglePath() {
         // create the squiggle path
-        move(to: CGPoint(x: (104.0 * 1.2 - 67), y: (15.0 * 1.2 - 44)))
-        addCurve(to: CGPoint(x: (63.00 * 1.2 - 67), y: (54.0 * 1.2 - 44)), control1: CGPoint(x: (112.4 * 1.2 - 67), y: (36.9 * 1.2 - 44)), control2: CGPoint(x: (89.70 * 1.2 - 67), y: (60.8 * 1.2 - 44)))
-        addCurve(to: CGPoint(x: (27.00 * 1.2 - 67), y: (53.0 * 1.2 - 44)), control1: CGPoint(x: (52.30 * 1.2 - 67), y: (51.3 * 1.2 - 44)), control2: CGPoint(x: (42.20 * 1.2 - 67), y: (42.0 * 1.2 - 44)))
-        addCurve(to: CGPoint(x: (5.000 * 1.2 - 67), y: (40.0 * 1.2 - 44)), control1: CGPoint(x: (9.600 * 1.2 - 67), y: (65.6 * 1.2 - 44)), control2: CGPoint(x: (5.400 * 1.2 - 67), y: (58.3 * 1.2 - 44)))
-        addCurve(to: CGPoint(x: (36.00 * 1.2 - 67), y: (12.0 * 1.2 - 44)), control1: CGPoint(x: (4.600 * 1.2 - 67), y: (22.0 * 1.2 - 44)), control2: CGPoint(x: (19.10 * 1.2 - 67), y: (9.70 * 1.2 - 44)))
-        addCurve(to: CGPoint(x: (89.00 * 1.2 - 67), y: (14.0 * 1.2 - 44)), control1: CGPoint(x: (59.20 * 1.2 - 67), y: (15.2 * 1.2 - 44)), control2: CGPoint(x: (61.90 * 1.2 - 67), y: (31.5 * 1.2 - 44)))
-        addCurve(to: CGPoint(x: (104.0 * 1.2 - 67), y: (15.0 * 1.2 - 44)), control1: CGPoint(x: (95.30 * 1.2 - 67), y: (10.0 * 1.2 - 44)), control2: CGPoint(x: (100.9 * 1.2 - 67), y: (6.90 * 1.2 - 44)))
+
+        move(to: CGPoint(x: 57.8, y: -26))
+
+        let pathPoints = [
+            (to: CGPoint(x: 8.6, y: 20.8), control1: CGPoint(x: 67.880, y: 0.28), control2: CGPoint(x: 40.64, y: 28.96)),
+            (to: CGPoint(x: -34.6, y: 19.6), control1: CGPoint(x: -4.24, y: 17.56), control2: CGPoint(x: -16.36, y: 6.4)),
+            (to: CGPoint(x: -61, y: 4), control1: CGPoint(x: -55.48, y: 34.720), control2: CGPoint(x: -60.52, y: 25.96)),
+            (to: CGPoint(x: -23.8, y: -29), control1: CGPoint(x: -61.48, y: -17.6), control2: CGPoint(x: -44.08, y: -32.36)),
+            (to: CGPoint(x: 39.8, y: -27), control1: CGPoint(x: 4.04, y: -25.76), control2: CGPoint(x: 7.28, y: -6.2)),
+            (to: CGPoint(x: 57.8, y: -26), control1: CGPoint(x: 47.36, y: -32), control2: CGPoint(x: 54.08, y: -35.72)),
+        ]
+
+        for (to, control1, control2) in pathPoints {
+            addCurve(to: to, control1: control1, control2: control2)
+        }
 
         setLineCap(.round)
     }
