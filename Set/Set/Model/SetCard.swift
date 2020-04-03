@@ -36,7 +36,6 @@ struct SetCard {
             }
         }
     }
-
 }
 
 extension SetCard: Hashable {
