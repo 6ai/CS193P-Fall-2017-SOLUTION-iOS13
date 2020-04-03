@@ -70,81 +70,9 @@ class SetViewController: UIViewController {
         cardsAfterMatchedAnimation(matchedCards: matchedCards)
     }
 
-
     // MARK: Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
     private lazy var cardBehavior = SetCardBehavior(in: animator)
-
-    private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
-
-        for index in cardViews.indices {
-            let cardView = cardViews[index]
-            let cardMoveTo = cardView.frame
-            cardView.frame = deckOriginFrame
-            cardView.isFaceUp = false
-
-            let flipCardOnDeckAnimation: () -> () = {
-                UIView.transition(
-                        with: cardView,
-                        duration: 0.5,
-                        options: [.transitionFlipFromLeft],
-                        animations: { cardView.isFaceUp = true }
-                )
-            }
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 0.6,
-                    delay: TimeInterval(index) * 0.3,
-                    animations: { cardView.frame = cardMoveTo },
-                    completion: { _ in flipCardOnDeckAnimation() }
-            )
-        }
-    }
-
-    private func cardsAfterMatchedAnimation(matchedCards: [SetCardView]) {
-
-        for matchCard in matchedCards {
-            matchCard.isSelected = false
-            let horizontalRotationCardAnimation = {
-                matchCard.transform = CGAffineTransform.identity.rotated(by: CGFloat.pi / 2)
-            }
-
-            let flipOnStackOfCardsAnimation: (UIViewAnimatingPosition) -> () = { _ in
-                self.barInfo.setsCountLabel.alpha = 0
-                UIView.transition(
-                        with: matchCard,
-                        duration: 0.8,
-                        options: [.transitionFlipFromLeft],
-                        animations: { matchCard.isFaceUp = false },
-                        completion: { _ in
-                            self.barInfo.setsCountLabel.alpha = 1
-                            matchCard.alpha = 0
-                            self.barInfo.setsCountLabel.text = "\(self.game.matchedCount) Sets"
-                        }
-                )
-            }
-
-            let moveCardsToStackOfCardsAnimation: (Bool) -> () = { _ in
-                UIViewPropertyAnimator.runningPropertyAnimator(
-                        withDuration: 0.5,
-                        delay: 0.1,
-                        options: [.curveEaseIn],
-                        animations: { matchCard.frame = self.setCountViewFrame },
-                        completion: flipOnStackOfCardsAnimation)
-            }
-
-            setTableView.addSubview(matchCard)
-            cardBehavior.addItem(matchCard)
-
-            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
-                self.cardBehavior.removeItem(matchCard)
-                UIView.transition(
-                        with: matchCard,
-                        duration: 0.2,
-                        animations: { horizontalRotationCardAnimation() },
-                        completion: moveCardsToStackOfCardsAnimation)
-            })
-        }
-    }
 
     // MARK: Autolayout
     private func setupLayout() {
@@ -192,5 +120,77 @@ extension SetViewController {
         return CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
     }
 
+}
+
+// MARK: - Animation
+extension SetViewController {
+    private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
+        for index in cardViews.indices {
+            let cardView = cardViews[index]
+            let cardMoveTo = cardView.frame
+            cardView.frame = deckOriginFrame
+            cardView.isFaceUp = false
+
+            let flipCardOnDeckAnimation: () -> () = {
+                UIView.transition(
+                        with: cardView,
+                        duration: 0.5,
+                        options: [.transitionFlipFromLeft],
+                        animations: { cardView.isFaceUp = true }
+                )
+            }
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 0.6,
+                    delay: TimeInterval(index) * 0.3,
+                    animations: { cardView.frame = cardMoveTo },
+                    completion: { _ in flipCardOnDeckAnimation() }
+            )
+        }
+    }
+
+    private func cardsAfterMatchedAnimation(matchedCards: [SetCardView]) {
+        for matchCard in matchedCards {
+            matchCard.isSelected = false
+            let horizontalRotationCardAnimation = {
+                matchCard.transform = CGAffineTransform.identity.rotated(by: CGFloat.pi / 2)
+            }
+
+            let flipOnStackOfCardsAnimation: (UIViewAnimatingPosition) -> () = { _ in
+                self.barInfo.setsCountLabel.alpha = 0
+                UIView.transition(
+                        with: matchCard,
+                        duration: 0.8,
+                        options: [.transitionFlipFromLeft],
+                        animations: { matchCard.isFaceUp = false },
+                        completion: { _ in
+                            self.barInfo.setsCountLabel.alpha = 1
+                            matchCard.alpha = 0
+                            self.barInfo.setsCountLabel.text = "\(self.game.matchedCount) Sets"
+                        }
+                )
+            }
+
+            let moveCardsToStackOfCardsAnimation: (Bool) -> () = { _ in
+                UIViewPropertyAnimator.runningPropertyAnimator(
+                        withDuration: 0.5,
+                        delay: 0.1,
+                        options: [.curveEaseIn],
+                        animations: { matchCard.frame = self.setCountViewFrame },
+                        completion: flipOnStackOfCardsAnimation)
+            }
+
+            setTableView.addSubview(matchCard)
+            cardBehavior.addItem(matchCard)
+
+            Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
+                self.cardBehavior.removeItem(matchCard)
+                UIView.transition(
+                        with: matchCard,
+                        duration: 0.2,
+                        animations: { horizontalRotationCardAnimation() },
+                        completion: moveCardsToStackOfCardsAnimation)
+            })
+        }
+    }
 }
 
