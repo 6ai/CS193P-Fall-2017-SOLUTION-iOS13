@@ -37,7 +37,7 @@ class SetViewController: UIViewController {
     }
 
     private func configure() {
-//        view.backgroundColor =
+        view.backgroundColor = .gameTableColor
         let tap = UITapGestureRecognizer(
                 target: self, action: #selector(layingOutThreeCardsOnTable))
         barInfo.addGestureRecognizer(tap)
@@ -73,53 +73,33 @@ class SetViewController: UIViewController {
     // MARK: Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
     private lazy var cardBehavior = SetCardBehavior(in: animator)
-
-    // MARK: Autolayout
-    private func setupLayout() {
-        let safeGuide = view.safeAreaLayoutGuide
-
-        let constraints = [
-            barInfo.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor),
-            barInfo.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor),
-            barInfo.bottomAnchor.constraint(equalTo: safeGuide.bottomAnchor, constant: -4),
-            barInfo.topAnchor.constraint(equalTo: setTableView.bottomAnchor, constant: 4),
-            barInfo.heightAnchor.constraint(equalToConstant: 80),
-
-            setTableView.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor),
-            setTableView.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor),
-            setTableView.topAnchor.constraint(equalTo: safeGuide.topAnchor, constant: 4)
-        ]
-
-        NSLayoutConstraint.activate(constraints)
-    }
 }
 
 // MARK: - SetTableViewDelegate
 extension SetViewController: SetTableViewDelegate {
     func clickOnCard(card: SetCard) {
-        game.cardsOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
+        game.cardsOnHands.contains(card) ? game.discard(card: card) :
+                game.takeCardFromTable(card: card)
         updateViewFromModel()
     }
 }
 
-// MARK: - Constants
 extension SetViewController {
     private var setCountViewCenter: CGPoint {
-        return barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
+        barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
     }
 
     private var setCountViewFrame: CGRect {
-        return CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
+        CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
     }
 
     private var deckOriginCenter: CGPoint {
-        return barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
+        barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
     }
 
     private var deckOriginFrame: CGRect {
-        return CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
+        CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
     }
-
 }
 
 // MARK: - Animation
@@ -164,8 +144,8 @@ extension SetViewController {
                         animations: { matchCard.isFaceUp = false },
                         completion: { _ in
                             self.barInfo.setsCountLabel.alpha = 1
-                            matchCard.alpha = 0
                             self.barInfo.setsCountLabel.text = "\(self.game.matchedCount) Sets"
+                            matchCard.alpha = 0
                         }
                 )
             }
@@ -191,6 +171,27 @@ extension SetViewController {
                         completion: moveCardsToStackOfCardsAnimation)
             })
         }
+    }
+}
+
+// MARK: - Autolayout
+extension SetViewController {
+    private func setupLayout() {
+        let safeArea = view.safeAreaLayoutGuide
+
+        let constraints = [
+            barInfo.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            barInfo.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            barInfo.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -4),
+            barInfo.topAnchor.constraint(equalTo: setTableView.bottomAnchor, constant: 4),
+            barInfo.heightAnchor.constraint(equalToConstant: 80),
+
+            setTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            setTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            setTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 4)
+        ]
+
+        NSLayoutConstraint.activate(constraints)
     }
 }
 

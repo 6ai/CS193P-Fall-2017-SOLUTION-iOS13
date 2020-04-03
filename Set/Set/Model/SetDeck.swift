@@ -9,14 +9,17 @@ struct SetDeck {
     private var deck: [SetCard]
 
     init() {
-        self.deck = []
-
+        deck = []
         for color in SetCard.Color.allCases {
             for shape in SetCard.Shape.allCases {
                 for shading in SetCard.Shading.allCases {
                     for number in SetCard.Number.allCases {
-                        let card = SetCard(color: color, shape: shape, number: number, shading: shading)
-                        self.deck.append(card)
+                        deck.append(SetCard(
+                                color: color,
+                                shape: shape,
+                                number: number,
+                                shading: shading
+                        ))
                     }
                 }
             }
@@ -28,7 +31,7 @@ struct SetDeck {
     }
 
     func isEmpty() -> Bool {
-        return deck.isEmpty
+        deck.isEmpty
     }
 
     mutating func draw(countOfCards number: Int) -> [SetCard]? {

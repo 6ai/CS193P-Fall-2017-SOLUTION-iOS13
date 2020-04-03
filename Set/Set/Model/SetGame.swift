@@ -6,11 +6,12 @@
 import Foundation
 
 struct SetGame {
+    private(set) var matchedCount = 0
 
     private(set) var deck = SetDeck()
-    private(set) var matchedCount = 0
     private(set) var cardsOnHands: [SetCard] = []
     private(set) var cardOnTable: [SetCard] = []
+
     private(set) var lastMatchedCard: [SetCard] = []
     private(set) var lastAddedCard: [SetCard] = []
 
@@ -24,36 +25,27 @@ struct SetGame {
         guard cardsOnHands.count == 3 else {
             return false
         }
-        if (cardsOnHands.map {
-            $0.color
-        }.unique.count) == 2 {
-            return false
-        }
 
-        if (cardsOnHands.map {
-            $0.shape
-        }.unique.count) == 2 {
-            return false
-        }
-
-        if (cardsOnHands.map {
-            $0.shading
-        }.unique.count) == 2 {
-            return false
-        }
-
-        if (cardsOnHands.map {
+        let numberAmount = cardsOnHands.map {
             $0.number
-        }.unique.count) == 2 {
-            return false
-        }
+        }.amountUniqueItems
+        let colorAmount = cardsOnHands.map {
+            $0.color
+        }.amountUniqueItems
+        let shadingAmount = cardsOnHands.map {
+            $0.shading
+        }.amountUniqueItems
+        let shapeAmount = cardsOnHands.map {
+            $0.shape
+        }.amountUniqueItems
 
-        return true
+        return numberAmount != 2 && colorAmount != 2 && shapeAmount != 2 && shadingAmount != 2
     }
 
     mutating func addCardsOnTable(countOfCards: Int) {
         guard let drawCards = deck.draw(countOfCards: countOfCards) else {
-            lastAddedCard.removeAll(); return }
+            lastAddedCard.removeAll(); return
+        }
         lastAddedCard = drawCards
         cardOnTable = cardOnTable + drawCards
     }
@@ -104,8 +96,8 @@ struct SetGame {
 }
 
 extension Array where Element: Hashable {
-    var unique: [Element] {
-        return Array(Set(self))
+    var amountUniqueItems: Int {
+        Array(Set(self)).count
     }
 }
 

@@ -5,12 +5,18 @@
 
 import UIKit
 
-struct SetCard {
+struct SetCard: CustomStringConvertible {
     let color: Color
     let shape: Shape
     let number: Number
     let shading: Shading
 
+    var description: String {
+        "SetCard(color: \(color), shape: \(shape), number: \(number), shading: \(shading))"
+    }
+}
+
+extension SetCard {
     enum Shape: CaseIterable {
         case oval, diamond, squiggle
     }
@@ -21,11 +27,12 @@ struct SetCard {
 
     enum Number: CaseIterable {
         case one, two, three
+
     }
 
     enum Color: CaseIterable {
         case variant1, variant2, variant3
-        var value: UIColor {
+        var rawValue: UIColor {
             switch self {
             case .variant1:
                 return UIColor.red

@@ -43,7 +43,7 @@ class SetCardView: UIView {
         for (x, y) in coordinatesForShapesLayout {
             context.createFigurePath(figure: card.shape, scale: self.scale, translate: (x: x, y: y))
         }
-        context.fillFigure(shading: card.shading, color: card.color.value, lineWidth: scaleLineWidth)
+        context.fillFigure(shading: card.shading, color: card.color.rawValue, lineWidth: scaleLineWidth)
     }
 
     override func layoutSubviews() {
@@ -52,23 +52,19 @@ class SetCardView: UIView {
     }
 
     private func configure() {
-        backgroundColor = isFaceUp ? SizeRatioOfOriginSetCard.cardColor : SizeRatioOfOriginSetCard.backColor
-        layer.borderColor = SizeRatioOfOriginSetCard.borderColor
+        backgroundColor = isFaceUp ? UIColor.faceOfCardColor : UIColor.backOfCardColor
+        layer.borderColor = UIColor.cardBorderSelectionColor.cgColor
         layer.borderWidth = isSelected ? SizeRatioOfOriginSetCard.lineWidth : 0
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
     }
 }
 
-// MARK: - Constants
 extension SetCardView {
     private struct SizeRatioOfOriginSetCard {
         static let boundsHeight: CGFloat = 400
         static let boundsWidth: CGFloat = 250
         static let cornerRadiusCoefficient: CGFloat = 0.08
-        static let cardColor: UIColor = UIColor.white
-        static let borderColor: CGColor = UIColor.red.cgColor
-        static let backColor: UIColor = UIColor.systemPink
         static let lineWidth: CGFloat = 2
         static let scale: CGFloat = 1.3
     }
