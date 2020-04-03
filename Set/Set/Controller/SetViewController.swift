@@ -71,14 +71,11 @@ class SetViewController: UIViewController {
     }
 
 
-
     // MARK: Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
     private lazy var cardBehavior = SetCardBehavior(in: animator)
 
     private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
-        let deckOriginCenter = barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
-        let deckOriginFrame = CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
 
         for index in cardViews.indices {
             let cardView = cardViews[index]
@@ -104,8 +101,6 @@ class SetViewController: UIViewController {
     }
 
     private func cardsAfterMatchedAnimation(matchedCards: [SetCardView]) {
-        let setCountViewCenter = barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
-        let setCountViewFrame = CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
 
         for matchCard in matchedCards {
             matchCard.isSelected = false
@@ -133,7 +128,7 @@ class SetViewController: UIViewController {
                         withDuration: 0.5,
                         delay: 0.1,
                         options: [.curveEaseIn],
-                        animations: { matchCard.frame = setCountViewFrame },
+                        animations: { matchCard.frame = self.setCountViewFrame },
                         completion: flipOnStackOfCardsAnimation)
             }
 
@@ -177,5 +172,25 @@ extension SetViewController: SetTableViewDelegate {
         game.cardsOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
         updateViewFromModel()
     }
+}
+
+// MARK: - Constants
+extension SetViewController {
+    private var setCountViewCenter: CGPoint {
+        return barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
+    }
+
+    private var setCountViewFrame: CGRect {
+        return CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
+    }
+
+    private var deckOriginCenter: CGPoint {
+        return barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
+    }
+
+    private var deckOriginFrame: CGRect {
+        return CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
+    }
+
 }
 
