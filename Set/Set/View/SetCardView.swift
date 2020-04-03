@@ -12,21 +12,22 @@ class SetCardView: UIView {
             setNeedsDisplay(); setNeedsLayout()
         }
     }
+
     var isFaceUp: Bool = true {
         didSet {
             setNeedsDisplay(); setNeedsLayout()
         }
     }
+
     var isSelected: Bool = false {
         didSet {
-            isSelected ? addBorder() : removeBorder()
+            setNeedsDisplay(); setNeedsLayout()
         }
     }
 
     convenience init(frame: CGRect = .zero, card: SetCard) {
         self.init(frame: frame)
         self.card = card
-        configure()
     }
 
     override func draw(_ rect: CGRect) {
@@ -34,83 +35,78 @@ class SetCardView: UIView {
         guard let context = UIGraphicsGetCurrentContext(), isFaceUp else {
             return
         }
-        for (x, y) in coordinatesOfShapes {
+
+        layoutFigures(context: context)
+    }
+
+    private func layoutFigures(context: CGContext) {
+        for (x, y) in coordinatesForShapesLayout {
             context.createFigurePath(figure: card.shape, scale: self.scale, translate: (x: x, y: y))
         }
-
-        context.fillFigure(shading: card.shading, color: card.color.value, lineWidth: lineWidth)
-    }
-
-
-    func addBorder() {
-        layer.borderColor = Constants.borderColor
-        layer.borderWidth = lineWidth * 2
-    }
-
-    func removeBorder() {
-        layer.borderWidth = 0
-    }
-
-    private func configure() {
-        backgroundColor = isFaceUp ? .white : #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
-
+        context.fillFigure(shading: card.shading, color: card.color.value, lineWidth: scaleLineWidth)
     }
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundColor = isFaceUp ? .white : #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
-        layer.cornerRadius = bounds.size.height * Constants.cornerRadius
-        layer.masksToBounds = true
+        configure()
     }
 
-    private func roundView() {
-        let roundedRect = UIBezierPath(roundedRect: self.frame, cornerRadius: cornerRadius)
-        Constants.cardColor.setFill()
-        roundedRect.addClip()
-        roundedRect.fill()
+    private func configure() {
+        backgroundColor = isFaceUp ? SizeRatioOfOriginSetCard.cardColor : SizeRatioOfOriginSetCard.backColor
+        layer.cornerRadius = bounds.size.height * SizeRatioOfOriginSetCard.cornerRadius
+        layer.borderColor = /*isSelected ? */SizeRatioOfOriginSetCard.borderColor /*: .none*/
+        layer.masksToBounds = true
     }
 }
 
 private extension SetCardView {
-    private struct Constants {
+
+    struct SizeRatioOfOriginSetCard {
         static let boundsHeight: CGFloat = 400
         static let boundsWidth: CGFloat = 250
-        static let scale: CGFloat = 1.3
-        static let cardColor: UIColor = .white
         static let cornerRadius: CGFloat = 0.08
-        static let thirdOffset: CGFloat = 110
-        static let offset: CGFloat = 52
+        static let cardColor: UIColor = UIColor.white
         static let borderColor: CGColor = UIColor.red.cgColor
+        static let backColor: UIColor = UIColor.systemPink
+        static let lineWidth: CGFloat = 2
+        static let scale: CGFloat = 1.3
     }
 
-    private var lineWidth: CGFloat {
-        return scale * 2
+    struct CenterOffsetForLayoutShapes {
+        static let threeShapesOnCard: CGFloat = 110
+        static let twoShapesOnCard: CGFloat = 52
     }
 
-    private var scale: CGFloat {
-        return Constants.scale * bounds.size.height / Constants.boundsHeight
+    var scaleLineWidth: CGFloat {
+        return scale * SizeRatioOfOriginSetCard.lineWidth
     }
 
-    private var cornerRadius: CGFloat {
-        return bounds.size.height * Constants.cornerRadius
+    var scale: CGFloat {
+        return SizeRatioOfOriginSetCard.scale * bounds.size.height / SizeRatioOfOriginSetCard.boundsHeight
     }
 
-    private var coordinatesOfShapes: [(dx: CGFloat, dy: CGFloat)] {
+    var cornerRadius: CGFloat {
+        return bounds.size.height * SizeRatioOfOriginSetCard.cornerRadius
+    }
+
+    var coordinatesForShapesLayout: [(dx: CGFloat, dy: CGFloat)] {
         switch card.number {
         case .one:
             return [(bounds.midX, bounds.midY)]
         case .two:
-            return [(bounds.midX, bounds.midY + Constants.offset * scale / 1.3),
-                    (bounds.midX, bounds.midY - Constants.offset * scale / 1.3)]
+            let offset = CenterOffsetForLayoutShapes.twoShapesOnCard * scale / 1.3
+            return [(bounds.midX, bounds.midY + offset),
+                    (bounds.midX, bounds.midY - offset)]
         case .three:
-            return [(bounds.midX, bounds.midY - Constants.thirdOffset * scale / 1.3),
+            let offset = CenterOffsetForLayoutShapes.threeShapesOnCard * scale / 1.3
+            return [(bounds.midX, bounds.midY - offset),
                     (bounds.midX, bounds.midY),
-                    (bounds.midX, bounds.midY + Constants.thirdOffset * scale / 1.3)]
+                    (bounds.midX, bounds.midY + offset)]
         }
     }
 }
 
-// MARK: CGContext
+// MARK: - CGContext
 extension CGContext {
 
     func fillFigure(shading: SetCard.Shading, color: UIColor, lineWidth: CGFloat) {
