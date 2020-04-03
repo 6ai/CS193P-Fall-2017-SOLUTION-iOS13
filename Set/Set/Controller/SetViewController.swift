@@ -26,10 +26,7 @@ class SetViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // todo move
-        view.backgroundColor = #colorLiteral(red: 0.478271801, green: 0.4424946756, blue: 0.6212127221, alpha: 0.6511932791)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(layingOutThreeCardsOnTable))
-        barInfo.addGestureRecognizer(tap)
+        configure()
 
         setTableView.delegate = self
 
@@ -37,6 +34,13 @@ class SetViewController: UIViewController {
         view.addSubview(setTableView)
 
         setupLayout()
+    }
+
+    private func configure() {
+//        view.backgroundColor =
+        let tap = UITapGestureRecognizer(
+                target: self, action: #selector(layingOutThreeCardsOnTable))
+        barInfo.addGestureRecognizer(tap)
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -100,7 +104,7 @@ class SetViewController: UIViewController {
     }
 
     private func cardsAfterMatchedAnimation(matchedCards: [SetCardView]) {
-        let setCountViewCenter = barInfo.convert(barInfo.setCountButton.frame.origin, to: setTableView)
+        let setCountViewCenter = barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
         let setCountViewFrame = CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
 
         for matchCard in matchedCards {
@@ -110,16 +114,16 @@ class SetViewController: UIViewController {
             }
 
             let flipOnStackOfCardsAnimation: (UIViewAnimatingPosition) -> () = { _ in
-                self.barInfo.setCountButton.alpha = 0
+                self.barInfo.setsCountLabel.alpha = 0
                 UIView.transition(
                         with: matchCard,
                         duration: 0.8,
                         options: [.transitionFlipFromLeft],
                         animations: { matchCard.isFaceUp = false },
                         completion: { _ in
-                            self.barInfo.setCountButton.alpha = 1
+                            self.barInfo.setsCountLabel.alpha = 1
                             matchCard.alpha = 0
-                            self.barInfo.setCountButton.text = "\(self.game.matchedCount) Sets"
+                            self.barInfo.setsCountLabel.text = "\(self.game.matchedCount) Sets"
                         }
                 )
             }
