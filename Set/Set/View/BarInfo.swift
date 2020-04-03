@@ -16,7 +16,7 @@ class BarInfo: UIStackView {
         return btn
     }()
 
-    let setCountButton: UILabel = {
+    let setsCountLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
         label.alpha = 0
@@ -32,9 +32,11 @@ class BarInfo: UIStackView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         configure()
+
         addArrangedSubview(dealButton)
-        addArrangedSubview(setCountButton)
+        addArrangedSubview(setsCountLabel)
     }
 
     private class func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString {
@@ -55,13 +57,15 @@ class BarInfo: UIStackView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        dealButton.layer.cornerRadius = dealButton.bounds.height * 0.08
-        setCountButton.layer.cornerRadius = setCountButton.bounds.height * 0.08
+        dealButton.layer.cornerRadius = dealButton.bounds.height * SizeRatio.cornerRadiusCoefficient
+        setsCountLabel.layer.cornerRadius = setsCountLabel.bounds.height * SizeRatio.cornerRadiusCoefficient
     }
 }
 
 extension BarInfo {
-    private var contentButtonsCornerRadius: CGFloat {
-        return bounds.size.height * 0.08
+
+    private struct SizeRatio {
+        static let cornerRadiusCoefficient: CGFloat = 0.08
     }
+
 }
