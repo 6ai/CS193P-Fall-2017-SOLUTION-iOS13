@@ -12,8 +12,8 @@ struct SetGame {
     private(set) var cardsOnHands: [SetCard] = []
     private(set) var cardOnTable: [SetCard] = []
 
-    private(set) var lastMatchedCard: [SetCard] = []
-    private(set) var lastAddedCard: [SetCard] = []
+    /*private(set)*/ var lastMatchedCard: [SetCard] = []
+    /*private(set)*/ var lastAddedCard: [SetCard] = []
 
     init() {
         deck.shuffle()
@@ -55,7 +55,6 @@ struct SetGame {
     }
 
     mutating func clearTableFromTakenCards() {
-        lastAddedCard.removeAll()
         for card in cardsOnHands {
             if let cardIndexOnTable = cardOnTable.firstIndex(of: card) {
                 if let drawCards = deck.draw(countOfCards: 1) {
@@ -73,8 +72,6 @@ struct SetGame {
             return
         }
         cardsOnHands.append(card)
-        lastAddedCard.removeAll()
-        lastMatchedCard.removeAll()
         if cardsOnHands.count == 3 {
             if isChosenCardsContainsSet() {
                 matchedCount += 1
@@ -89,8 +86,6 @@ struct SetGame {
         guard let indexOfCard = cardsOnHands.firstIndex(of: card) else {
             return
         }
-        lastAddedCard.removeAll()
-        lastMatchedCard.removeAll()
         cardsOnHands.remove(at: indexOfCard)
     }
 }

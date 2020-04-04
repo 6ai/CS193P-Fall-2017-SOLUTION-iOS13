@@ -48,6 +48,14 @@ class SetViewController: UIViewController {
         updateViewFromModel()
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil, completion: {
+            _ in
+            self.updateViewFromModel()
+        })
+    }
+
     @objc private func layingOutThreeCardsOnTable() {
         game.addCardsOnTable(countOfCards: 3)
         updateViewFromModel()
@@ -66,44 +74,17 @@ class SetViewController: UIViewController {
             game.lastAddedCard.contains($0.card)
         }
 
+        game.lastAddedCard.removeAll()
+        game.lastMatchedCard.removeAll()
+
         layingOutCardAnimation(needLayingOutCards)
         cardsAfterMatchedAnimation(matchedCards: matchedCards)
     }
 
-    // MARK: Dynamic Animator
+    // MARK: - Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
     private lazy var cardBehavior = SetCardBehavior(in: animator)
-}
 
-// MARK: - SetTableViewDelegate
-extension SetViewController: SetTableViewDelegate {
-    func clickOnCard(card: SetCard) {
-        game.cardsOnHands.contains(card) ? game.discard(card: card) :
-                game.takeCardFromTable(card: card)
-        updateViewFromModel()
-    }
-}
-
-extension SetViewController {
-    private var setCountViewCenter: CGPoint {
-        barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
-    }
-
-    private var setCountViewFrame: CGRect {
-        CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
-    }
-
-    private var deckOriginCenter: CGPoint {
-        barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
-    }
-
-    private var deckOriginFrame: CGRect {
-        CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
-    }
-}
-
-// MARK: - Animation
-extension SetViewController {
     private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
         for index in cardViews.indices {
             let cardView = cardViews[index]
@@ -171,6 +152,33 @@ extension SetViewController {
                         completion: moveCardsToStackOfCardsAnimation)
             })
         }
+    }
+}
+
+// MARK: - SetTableViewDelegate
+extension SetViewController: SetTableViewDelegate {
+    func clickOnCard(card: SetCard) {
+        game.cardsOnHands.contains(card) ? game.discard(card: card) :
+                game.takeCardFromTable(card: card)
+        updateViewFromModel()
+    }
+}
+
+extension SetViewController {
+    private var setCountViewCenter: CGPoint {
+        barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
+    }
+
+    private var setCountViewFrame: CGRect {
+        CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
+    }
+
+    private var deckOriginCenter: CGPoint {
+        barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
+    }
+
+    private var deckOriginFrame: CGRect {
+        CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
     }
 }
 
