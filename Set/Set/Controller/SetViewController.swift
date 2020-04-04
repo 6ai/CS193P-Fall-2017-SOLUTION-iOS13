@@ -5,7 +5,7 @@
 
 import UIKit
 
-class SetViewController: UIViewController, SetTableViewDelegate {
+class SetViewController: UIViewController {
     private var game = SetGame()
 
     private let barInfo: BarInfo = {
@@ -26,10 +26,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // todo move
-        view.backgroundColor = #colorLiteral(red: 0.478271801, green: 0.4424946756, blue: 0.6212127221, alpha: 0.6511932791)
-        let tap = UITapGestureRecognizer(target: self, action: #selector(layingOutThreeCardsOnTable))
-        barInfo.addGestureRecognizer(tap)
+        configure()
 
         setTableView.delegate = self
 
@@ -39,15 +36,27 @@ class SetViewController: UIViewController, SetTableViewDelegate {
         setupLayout()
     }
 
+    private func configure() {
+        view.backgroundColor = .gameTableColor
+        let tap = UITapGestureRecognizer(
+                target: self, action: #selector(layingOutThreeCardsOnTable))
+        barInfo.addGestureRecognizer(tap)
+    }
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateViewFromModel()
     }
 
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: nil, completion: {
+            _ in
+            self.updateViewFromModel()
+        })
+    }
+
     @objc private func layingOutThreeCardsOnTable() {
-        guard game.cardOnTable.count <= 21 else {
-            return
-        }
         game.addCardsOnTable(countOfCards: 3)
         updateViewFromModel()
     }
@@ -65,23 +74,18 @@ class SetViewController: UIViewController, SetTableViewDelegate {
             game.lastAddedCard.contains($0.card)
         }
 
+        game.lastAddedCard.removeAll()
+        game.lastMatchedCard.removeAll()
+
         layingOutCardAnimation(needLayingOutCards)
         cardsAfterMatchedAnimation(matchedCards: matchedCards)
     }
 
-    func clickOnCard(card: SetCard) {
-        game.cardsOnHands.contains(card) ? game.discard(card: card) : game.takeCardFromTable(card: card)
-        updateViewFromModel()
-    }
-
-    // Mark: Dynamic Animator
+    // MARK: - Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
     private lazy var cardBehavior = SetCardBehavior(in: animator)
 
     private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
-        let deckOriginCenter = barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
-        let deckOriginFrame = CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
-
         for index in cardViews.indices {
             let cardView = cardViews[index]
             let cardMoveTo = cardView.frame
@@ -106,9 +110,6 @@ class SetViewController: UIViewController, SetTableViewDelegate {
     }
 
     private func cardsAfterMatchedAnimation(matchedCards: [SetCardView]) {
-        let setCountViewCenter = barInfo.convert(barInfo.setCountButton.frame.origin, to: setTableView)
-        let setCountViewFrame = CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
-
         for matchCard in matchedCards {
             matchCard.isSelected = false
             let horizontalRotationCardAnimation = {
@@ -116,16 +117,16 @@ class SetViewController: UIViewController, SetTableViewDelegate {
             }
 
             let flipOnStackOfCardsAnimation: (UIViewAnimatingPosition) -> () = { _ in
-                self.barInfo.setCountButton.alpha = 0
+                self.barInfo.setsCountLabel.alpha = 0
                 UIView.transition(
                         with: matchCard,
                         duration: 0.8,
                         options: [.transitionFlipFromLeft],
                         animations: { matchCard.isFaceUp = false },
                         completion: { _ in
-                            self.barInfo.setCountButton.alpha = 1
+                            self.barInfo.setsCountLabel.alpha = 1
+                            self.barInfo.setsCountLabel.text = "\(self.game.matchedCount) Sets"
                             matchCard.alpha = 0
-                            self.barInfo.setCountButton.text = "\(self.game.matchedCount) Sets"
                         }
                 )
             }
@@ -135,7 +136,7 @@ class SetViewController: UIViewController, SetTableViewDelegate {
                         withDuration: 0.5,
                         delay: 0.1,
                         options: [.curveEaseIn],
-                        animations: { matchCard.frame = setCountViewFrame },
+                        animations: { matchCard.frame = self.setCountViewFrame },
                         completion: flipOnStackOfCardsAnimation)
             }
 
@@ -152,25 +153,53 @@ class SetViewController: UIViewController, SetTableViewDelegate {
             })
         }
     }
+}
 
-    // Mark: Autolayout
+// MARK: - SetTableViewDelegate
+extension SetViewController: SetTableViewDelegate {
+    func clickOnCard(card: SetCard) {
+        game.cardsOnHands.contains(card) ? game.discard(card: card) :
+                game.takeCardFromTable(card: card)
+        updateViewFromModel()
+    }
+}
+
+extension SetViewController {
+    private var setCountViewCenter: CGPoint {
+        barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
+    }
+
+    private var setCountViewFrame: CGRect {
+        CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
+    }
+
+    private var deckOriginCenter: CGPoint {
+        barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
+    }
+
+    private var deckOriginFrame: CGRect {
+        CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
+    }
+}
+
+// MARK: - Autolayout
+extension SetViewController {
     private func setupLayout() {
-        let safeGuide = view.safeAreaLayoutGuide
+        let safeArea = view.safeAreaLayoutGuide
 
         let constraints = [
-            barInfo.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor),
-            barInfo.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor),
-            barInfo.bottomAnchor.constraint(equalTo: safeGuide.bottomAnchor, constant: -4),
+            barInfo.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            barInfo.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            barInfo.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -4),
             barInfo.topAnchor.constraint(equalTo: setTableView.bottomAnchor, constant: 4),
             barInfo.heightAnchor.constraint(equalToConstant: 80),
 
-            setTableView.trailingAnchor.constraint(equalTo: safeGuide.trailingAnchor),
-            setTableView.leadingAnchor.constraint(equalTo: safeGuide.leadingAnchor),
-            setTableView.topAnchor.constraint(equalTo: safeGuide.topAnchor, constant: 4)
+            setTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            setTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            setTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 4)
         ]
 
         NSLayoutConstraint.activate(constraints)
     }
 }
-
 

@@ -9,16 +9,16 @@ class BarInfo: UIStackView {
     let dealButton: UILabel = {
         let btn = UILabel()
         btn.attributedText = centeredAttributedString("Deal", fontSize: 32)
-        btn.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        btn.backgroundColor = .backOfCardColor
         btn.layer.cornerRadius = btn.bounds.height * 0.08
         btn.layer.masksToBounds = true
 
         return btn
     }()
 
-    let setCountButton: UILabel = {
+    let setsCountLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
+        label.backgroundColor = .backOfCardColor
         label.alpha = 0
         label.attributedText = centeredAttributedString("Stack", fontSize: 32)
         label.layer.masksToBounds = true
@@ -32,9 +32,11 @@ class BarInfo: UIStackView {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
         configure()
+
         addArrangedSubview(dealButton)
-        addArrangedSubview(setCountButton)
+        addArrangedSubview(setsCountLabel)
     }
 
     private class func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString {
@@ -55,13 +57,19 @@ class BarInfo: UIStackView {
 
     override func layoutSubviews() {
         super.layoutSubviews()
-        dealButton.layer.cornerRadius = dealButton.bounds.height * 0.08
-        setCountButton.layer.cornerRadius = setCountButton.bounds.height * 0.08
+
+        dealButton.layer.cornerRadius = contentViewCornerRadius
+        setsCountLabel.layer.cornerRadius = contentViewCornerRadius
     }
 }
 
 extension BarInfo {
-    private var contentButtonsCornerRadius: CGFloat {
-        return bounds.size.height * 0.08
+    private var contentViewCornerRadius: CGFloat {
+        dealButton.bounds.height * SizeRatio.cornerRadiusCoefficient
     }
+
+    private struct SizeRatio {
+        static let cornerRadiusCoefficient: CGFloat = 0.08
+    }
+
 }

@@ -11,22 +11,13 @@ protocol SetTableViewDelegate {
 
 class SetTableView: UIView {
     private(set) var frameGrid = Grid(layout: .aspectRatio(CardLayout.aspectRatio))
+    private(set) var views: [SetCardView] = []
+
+    var delegate: SetTableViewDelegate!
     var cards: [SetCard] = [] {
         didSet {
             recalculate()
         }
-    }
-    private(set) var views: [SetCardView] = []
-    var delegate: SetTableViewDelegate!
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        frameGrid.frame = frame
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        frameGrid.frame = frame
     }
 
     subscript(index: Int) -> SetCardView {
@@ -41,7 +32,13 @@ class SetTableView: UIView {
         }
     }
 
-    func recalculate() {
+    func clearTableViewFromSubviews() {
+        subviews.forEach {
+            $0.removeFromSuperview()
+        }
+    }
+
+    private func recalculate() {
         clearTableViewFromSubviews()
         frameGrid.frame = bounds
         frameGrid.cellCount = cards.count
@@ -53,30 +50,23 @@ class SetTableView: UIView {
             let cellFrame = frameGrid[index]!.narrowDown(by: CardLayout.spacingBetweenCards)
             let lastFrame = (index < views.count) ? views[index].frame : cellFrame
             let cardView = SetCardView(frame: lastFrame, card: card)
-            UIViewPropertyAnimator.runningPropertyAnimator(
-                    withDuration: 1, delay: 0, animations: { cardView.frame = cellFrame })
             let tap = UITapGestureRecognizer(target: self, action: #selector(clickOnCardView))
             cardView.addGestureRecognizer(tap)
-            addSubview(cardView)
             (index < views.count) ? (views[index] = cardView) : views.append(cardView)
+            UIViewPropertyAnimator.runningPropertyAnimator(
+                    withDuration: 1,
+                    delay: 0,
+                    animations: { cardView.frame = cellFrame }
+            )
+            addSubview(cardView)
         }
     }
 
-    @objc func clickOnCardView(_ recognizer: UITapGestureRecognizer) {
+    @objc private func clickOnCardView(_ recognizer: UITapGestureRecognizer) {
         guard let cardView = recognizer.view as? SetCardView else {
             return
         }
         delegate.clickOnCard(card: cardView.card)
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-
-    func clearTableViewFromSubviews() {
-        subviews.forEach {
-            $0.removeFromSuperview()
-        }
     }
 }
 
