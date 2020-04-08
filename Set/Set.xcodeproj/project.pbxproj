@@ -72,15 +72,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B0948C7C3181D180B1AFFEB9 /* Controller */ = {
+		B0948C7C3181D180B1AFFEB9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
 				B09487095C23366A453D256E /* SetViewController.swift */,
 			);
-			path = Controller;
+			path = Controllers;
 			sourceTree = "<group>";
 		};
-		B0948C99016A4BCA9D642406 /* View */ = {
+		B0948C99016A4BCA9D642406 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				B0948B3811CB921D662416E6 /* SetCardView.swift */,
@@ -88,7 +88,7 @@
 				B094891F0415F48BA2E7519A /* SetCardBehavior.swift */,
 				B094809430E3CAD9A7D95F34 /* BarInfo.swift */,
 			);
-			path = View;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		B0948D058E76F34E6A588C1C = {
@@ -103,16 +103,16 @@
 			isa = PBXGroup;
 			children = (
 				B0948862A47DFE2F4E021000 /* Supporting files */,
-				B0948C99016A4BCA9D642406 /* View */,
-				B0948EEEDDE71AB5FC5EB373 /* Model */,
-				B0948C7C3181D180B1AFFEB9 /* Controller */,
+				B0948C99016A4BCA9D642406 /* Views */,
+				B0948EEEDDE71AB5FC5EB373 /* Models */,
+				B0948C7C3181D180B1AFFEB9 /* Controllers */,
 				B0948EE96C4EAF0110CEBD7F /* Info.plist */,
 				B0948A16583229DAB4379BFD /* UIColorExtension.swift */,
 			);
 			path = Set;
 			sourceTree = "<group>";
 		};
-		B0948EEEDDE71AB5FC5EB373 /* Model */ = {
+		B0948EEEDDE71AB5FC5EB373 /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				B094888821C0E8CFA2DF35E2 /* Grid.swift */,
@@ -120,7 +120,7 @@
 				B09485087C517ADA5A5F6C99 /* SetDeck.swift */,
 				B0948ACE9A8158A6A6787D44 /* SetGame.swift */,
 			);
-			path = Model;
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

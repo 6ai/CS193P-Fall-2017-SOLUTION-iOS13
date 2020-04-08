@@ -16,7 +16,7 @@ class SetViewController: UIViewController {
         return stackView
     }()
 
-    private let setTableView: SetTableView = {
+    private let playingTableView: SetTableView = {
         let tableView = SetTableView()
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -28,10 +28,10 @@ class SetViewController: UIViewController {
         super.viewDidLoad()
 
         configure()
-        setTableView.delegate = self
+        playingTableView.delegate = self
 
         view.addSubview(barInfo)
-        view.addSubview(setTableView)
+        view.addSubview(playingTableView)
 
         setupLayout()
     }
@@ -63,14 +63,14 @@ class SetViewController: UIViewController {
 
     private func updateViewFromModel() {
         barInfo.dealButton.alpha = game.deck.isEmpty() ? 0 : 1
-        let matchedCards = setTableView.views.filter {
+        let matchedCards = playingTableView.views.filter {
             game.lastMatchedCard.contains($0.card)
         }
-        setTableView.cards = game.cardOnTable
-        setTableView.views.forEach {
+        playingTableView.cards = game.cardOnTable
+        playingTableView.views.forEach {
             $0.isSelected = game.cardsOnHands.contains($0.card)
         }
-        let needLayingOutCards = setTableView.views.filter {
+        let needLayingOutCards = playingTableView.views.filter {
             game.lastAddedCard.contains($0.card)
         }
 
@@ -82,7 +82,7 @@ class SetViewController: UIViewController {
     }
 
     // MARK: - Dynamic Animator
-    private lazy var animator = UIDynamicAnimator(referenceView: setTableView)
+    private lazy var animator = UIDynamicAnimator(referenceView: playingTableView)
     private lazy var cardBehavior = SetCardBehavior(in: animator)
 
     private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
@@ -140,7 +140,7 @@ class SetViewController: UIViewController {
                         completion: flipOnStackOfCardsAnimation)
             }
 
-            setTableView.addSubview(matchCard)
+            playingTableView.addSubview(matchCard)
             cardBehavior.addItem(matchCard)
 
             Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { _ in
@@ -166,7 +166,7 @@ extension SetViewController: SetTableViewDelegate {
 
 extension SetViewController {
     private var setCountViewCenter: CGPoint {
-        barInfo.convert(barInfo.setsCountLabel.frame.origin, to: setTableView)
+        barInfo.convert(barInfo.setsCountLabel.frame.origin, to: playingTableView)
     }
 
     private var setCountViewFrame: CGRect {
@@ -174,7 +174,7 @@ extension SetViewController {
     }
 
     private var deckOriginCenter: CGPoint {
-        barInfo.convert(barInfo.dealButton.frame.origin, to: setTableView)
+        barInfo.convert(barInfo.dealButton.frame.origin, to: playingTableView)
     }
 
     private var deckOriginFrame: CGRect {
@@ -191,12 +191,12 @@ extension SetViewController {
             barInfo.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
             barInfo.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
             barInfo.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor, constant: -4),
-            barInfo.topAnchor.constraint(equalTo: setTableView.bottomAnchor, constant: 4),
+            barInfo.topAnchor.constraint(equalTo: playingTableView.bottomAnchor, constant: 4),
             barInfo.heightAnchor.constraint(equalToConstant: 80),
 
-            setTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
-            setTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            setTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 4)
+            playingTableView.trailingAnchor.constraint(equalTo: safeArea.trailingAnchor),
+            playingTableView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
+            playingTableView.topAnchor.constraint(equalTo: safeArea.topAnchor, constant: 4)
         ]
 
         NSLayoutConstraint.activate(constraints)

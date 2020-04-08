@@ -3,6 +3,8 @@
 //  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
+import UIKit
+
 struct SetCard: CustomStringConvertible {
     let color: Color
     let shape: Shape
