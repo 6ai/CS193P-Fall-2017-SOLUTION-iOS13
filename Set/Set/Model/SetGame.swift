@@ -3,8 +3,6 @@
 //  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
-import Foundation
-
 struct SetGame {
     private(set) var matchedCount = 0
 

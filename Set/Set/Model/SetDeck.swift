@@ -3,8 +3,6 @@
 //  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
-import UIKit
-
 struct SetDeck {
     private var deck: [SetCard]
 

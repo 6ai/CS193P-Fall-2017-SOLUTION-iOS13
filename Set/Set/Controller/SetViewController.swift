@@ -6,6 +6,7 @@
 import UIKit
 
 class SetViewController: UIViewController {
+
     private var game = SetGame()
 
     private let barInfo: BarInfo = {
@@ -27,7 +28,6 @@ class SetViewController: UIViewController {
         super.viewDidLoad()
 
         configure()
-
         setTableView.delegate = self
 
         view.addSubview(barInfo)
