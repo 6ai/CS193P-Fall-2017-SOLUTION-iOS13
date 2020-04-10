@@ -6,7 +6,7 @@
 
 import UIKit
 
-class SetCardBehavior: UIDynamicBehavior {
+class CardBehavior: UIDynamicBehavior {
     private lazy var collisionBehavior: UICollisionBehavior = {
         let behavior = UICollisionBehavior()
         behavior.translatesReferenceBoundsIntoBoundary = true

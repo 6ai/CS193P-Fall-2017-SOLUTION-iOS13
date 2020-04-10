@@ -3,16 +3,16 @@
 //  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
-struct SetDeck {
-    private var deck: [SetCard]
+struct Deck {
+    private var deck: [Card]
 
     init() {
         deck = []
-        for color in SetCard.Color.allCases {
-            for shape in SetCard.Shape.allCases {
-                for shading in SetCard.Shading.allCases {
-                    for number in SetCard.Number.allCases {
-                        deck.append(SetCard(
+        for color in Card.Color.allCases {
+            for shape in Card.Shape.allCases {
+                for shading in Card.Shading.allCases {
+                    for number in Card.Number.allCases {
+                        deck.append(Card(
                                 color: color,
                                 shape: shape,
                                 number: number,
@@ -32,11 +32,11 @@ struct SetDeck {
         deck.isEmpty
     }
 
-    mutating func draw(countOfCards number: Int) -> [SetCard]? {
+    mutating func draw(countOfCards number: Int) -> [Card]? {
         guard number <= deck.count else {
             return nil
         }
-        var drawCards: [SetCard] = []
+        var drawCards: [Card] = []
         for _ in 1...number {
             drawCards.append(deck.popLast()!)
         }

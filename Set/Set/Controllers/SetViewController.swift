@@ -7,7 +7,7 @@ import UIKit
 
 class SetViewController: UIViewController {
 
-    private var game = SetGame()
+    private var game = Game()
 
     private let barInfo: BarInfo = {
         let stackView = BarInfo()
@@ -16,8 +16,8 @@ class SetViewController: UIViewController {
         return stackView
     }()
 
-    private let playingTableView: SetTableView = {
-        let tableView = SetTableView()
+    private let playingTableView: GameTableView = {
+        let tableView = GameTableView()
         tableView.backgroundColor = .clear
         tableView.translatesAutoresizingMaskIntoConstraints = false
 
@@ -29,9 +29,7 @@ class SetViewController: UIViewController {
 
         configure()
         playingTableView.delegate = self
-
-        view.addSubview(barInfo)
-        view.addSubview(playingTableView)
+        [barInfo, playingTableView].forEach({ view.addSubview($0)})
 
         setupLayout()
     }
@@ -62,7 +60,7 @@ class SetViewController: UIViewController {
     }
 
     private func updateViewFromModel() {
-        barInfo.dealButton.alpha = game.deck.isEmpty() ? 0 : 1
+        barInfo.layingOutCardsLabel.alpha = game.deck.isEmpty() ? 0 : 1
         let matchedCards = playingTableView.views.filter {
             game.lastMatchedCard.contains($0.card)
         }
@@ -83,9 +81,9 @@ class SetViewController: UIViewController {
 
     // MARK: - Dynamic Animator
     private lazy var animator = UIDynamicAnimator(referenceView: playingTableView)
-    private lazy var cardBehavior = SetCardBehavior(in: animator)
+    private lazy var cardBehavior = CardBehavior(in: animator)
 
-    private func layingOutCardAnimation(_ cardViews: [SetCardView]) {
+    private func layingOutCardAnimation(_ cardViews: [CardView]) {
         for index in cardViews.indices {
             let cardView = cardViews[index]
             let cardMoveTo = cardView.frame
@@ -109,7 +107,7 @@ class SetViewController: UIViewController {
         }
     }
 
-    private func cardsAfterMatchedAnimation(matchedCards: [SetCardView]) {
+    private func cardsAfterMatchedAnimation(matchedCards: [CardView]) {
         for matchCard in matchedCards {
             matchCard.isSelected = false
             let horizontalRotationCardAnimation = {
@@ -117,15 +115,15 @@ class SetViewController: UIViewController {
             }
 
             let flipOnStackOfCardsAnimation: (UIViewAnimatingPosition) -> () = { _ in
-                self.barInfo.setsCountLabel.alpha = 0
+                self.barInfo.numberOfCollectedSetsLabel.alpha = 0
                 UIView.transition(
                         with: matchCard,
                         duration: 0.8,
                         options: [.transitionFlipFromLeft],
                         animations: { matchCard.isFaceUp = false },
                         completion: { _ in
-                            self.barInfo.setsCountLabel.alpha = 1
-                            self.barInfo.setsCountLabel.text = "\(self.game.matchedCount) Sets"
+                            self.barInfo.numberOfCollectedSetsLabel.alpha = 1
+                            self.barInfo.numberOfCollectedSetsLabel.text = "\(self.game.matchedCount) Sets"
                             matchCard.alpha = 0
                         }
                 )
@@ -157,7 +155,7 @@ class SetViewController: UIViewController {
 
 // MARK: - SetTableViewDelegate
 extension SetViewController: SetTableViewDelegate {
-    func clickOnCard(card: SetCard) {
+    func clickOnCard(card: Card) {
         game.cardsOnHands.contains(card) ? game.discard(card: card) :
                 game.takeCardFromTable(card: card)
         updateViewFromModel()
@@ -166,19 +164,19 @@ extension SetViewController: SetTableViewDelegate {
 
 extension SetViewController {
     private var setCountViewCenter: CGPoint {
-        barInfo.convert(barInfo.setsCountLabel.frame.origin, to: playingTableView)
+        barInfo.convert(barInfo.numberOfCollectedSetsLabel.frame.origin, to: playingTableView)
     }
 
     private var setCountViewFrame: CGRect {
-        CGRect(origin: setCountViewCenter, size: barInfo.dealButton.frame.size)
+        CGRect(origin: setCountViewCenter, size: barInfo.layingOutCardsLabel.frame.size)
     }
 
     private var deckOriginCenter: CGPoint {
-        barInfo.convert(barInfo.dealButton.frame.origin, to: playingTableView)
+        barInfo.convert(barInfo.layingOutCardsLabel.frame.origin, to: playingTableView)
     }
 
     private var deckOriginFrame: CGRect {
-        CGRect(origin: deckOriginCenter, size: barInfo.dealButton.frame.size)
+        CGRect(origin: deckOriginCenter, size: barInfo.layingOutCardsLabel.frame.size)
     }
 }
 

@@ -6,17 +6,17 @@
 import UIKit
 
 class BarInfo: UIStackView {
-    let dealButton: UILabel = {
-        let btn = UILabel()
-        btn.attributedText = centeredAttributedString("Deal", fontSize: 32)
-        btn.backgroundColor = .backOfCardColor
-        btn.layer.cornerRadius = btn.bounds.height * 0.08
-        btn.layer.masksToBounds = true
 
-        return btn
+    let layingOutCardsLabel: UILabel = {
+        let label = UILabel()
+        label.attributedText = centeredAttributedString("Deal", fontSize: 32)
+        label.backgroundColor = .backOfCardColor
+        label.layer.masksToBounds = true
+
+        return label
     }()
 
-    let setsCountLabel: UILabel = {
+    let numberOfCollectedSetsLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .backOfCardColor
         label.alpha = 0
@@ -35,8 +35,7 @@ class BarInfo: UIStackView {
 
         configure()
 
-        addArrangedSubview(dealButton)
-        addArrangedSubview(setsCountLabel)
+        [layingOutCardsLabel, numberOfCollectedSetsLabel].forEach({ addArrangedSubview($0) })
     }
 
     private class func centeredAttributedString(_ string: String, fontSize: CGFloat) -> NSAttributedString {
@@ -58,14 +57,14 @@ class BarInfo: UIStackView {
     override func layoutSubviews() {
         super.layoutSubviews()
 
-        dealButton.layer.cornerRadius = contentViewCornerRadius
-        setsCountLabel.layer.cornerRadius = contentViewCornerRadius
+        layingOutCardsLabel.layer.cornerRadius = contentViewCornerRadius
+        numberOfCollectedSetsLabel.layer.cornerRadius = contentViewCornerRadius
     }
 }
 
 extension BarInfo {
     private var contentViewCornerRadius: CGFloat {
-        dealButton.bounds.height * SizeRatio.cornerRadiusCoefficient
+        layingOutCardsLabel.bounds.height * SizeRatio.cornerRadiusCoefficient
     }
 
     private struct SizeRatio {

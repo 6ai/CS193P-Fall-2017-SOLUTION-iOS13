@@ -5,7 +5,7 @@
 
 import UIKit
 
-struct SetCard: CustomStringConvertible {
+struct Card: CustomStringConvertible {
     let color: Color
     let shape: Shape
     let number: Number
@@ -16,7 +16,7 @@ struct SetCard: CustomStringConvertible {
     }
 }
 
-extension SetCard {
+extension Card {
     enum Shape: CaseIterable {
         case oval, diamond, squiggle
     }
@@ -45,7 +45,7 @@ extension SetCard {
     }
 }
 
-extension SetCard: Hashable {
+extension Card: Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(color)
@@ -54,7 +54,7 @@ extension SetCard: Hashable {
         hasher.combine(shading)
     }
 
-    static func ==(lhs: SetCard, rhs: SetCard) -> Bool {
+    static func ==(lhs: Card, rhs: Card) -> Bool {
         if lhs.color != rhs.color {
             return false
         }

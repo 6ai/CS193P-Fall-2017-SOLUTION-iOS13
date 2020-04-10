@@ -3,15 +3,15 @@
 //  Copyright © 2020 yasuhiko2. All rights reserved.
 //
 
-struct SetGame {
+struct Game {
     private(set) var matchedCount = 0
 
-    private(set) var deck = SetDeck()
-    private(set) var cardsOnHands: [SetCard] = []
-    private(set) var cardOnTable: [SetCard] = []
+    private(set) var deck = Deck()
+    private(set) var cardsOnHands: [Card] = []
+    private(set) var cardOnTable: [Card] = []
 
-    /*private(set)*/ var lastMatchedCard: [SetCard] = []
-    /*private(set)*/ var lastAddedCard: [SetCard] = []
+    var lastMatchedCard: [Card] = []
+    var lastAddedCard: [Card] = []
 
     init() {
         deck.shuffle()
@@ -65,7 +65,7 @@ struct SetGame {
         }
     }
 
-    mutating func takeCardFromTable(card: SetCard) {
+    mutating func takeCardFromTable(card: Card) {
         guard cardOnTable.contains(card) else {
             return
         }
@@ -80,7 +80,7 @@ struct SetGame {
         }
     }
 
-    mutating func discard(card: SetCard) {
+    mutating func discard(card: Card) {
         guard let indexOfCard = cardsOnHands.firstIndex(of: card) else {
             return
         }

@@ -6,21 +6,21 @@
 import UIKit
 
 protocol SetTableViewDelegate {
-    func clickOnCard(card: SetCard)
+    func clickOnCard(card: Card)
 }
 
-class SetTableView: UIView {
+class GameTableView: UIView {
     private(set) var frameGrid = Grid(layout: .aspectRatio(CardLayout.aspectRatio))
-    private(set) var views: [SetCardView] = []
+    private(set) var views: [CardView] = []
 
     var delegate: SetTableViewDelegate!
-    var cards: [SetCard] = [] {
+    var cards: [Card] = [] {
         didSet {
             recalculate()
         }
     }
 
-    subscript(index: Int) -> SetCardView {
+    subscript(index: Int) -> CardView {
         get {
             assert(index < views.count, "Index out of range")
             return views[index]
@@ -49,7 +49,7 @@ class SetTableView: UIView {
             let card = cards[index]
             let cellFrame = frameGrid[index]!.narrowDown(by: CardLayout.spacingBetweenCards)
             let lastFrame = (index < views.count) ? views[index].frame : cellFrame
-            let cardView = SetCardView(frame: lastFrame, card: card)
+            let cardView = CardView(frame: lastFrame, card: card)
             let tap = UITapGestureRecognizer(target: self, action: #selector(clickOnCardView))
             cardView.addGestureRecognizer(tap)
             (index < views.count) ? (views[index] = cardView) : views.append(cardView)
@@ -63,14 +63,14 @@ class SetTableView: UIView {
     }
 
     @objc private func clickOnCardView(_ recognizer: UITapGestureRecognizer) {
-        guard let cardView = recognizer.view as? SetCardView else {
+        guard let cardView = recognizer.view as? CardView else {
             return
         }
         delegate.clickOnCard(card: cardView.card)
     }
 }
 
-extension SetTableView {
+extension GameTableView {
     private struct CardLayout {
         static let aspectRatio: CGFloat = 5 / 8
         static let spacingBetweenCards: CGFloat = 5

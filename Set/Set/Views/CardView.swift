@@ -6,8 +6,8 @@
 
 import UIKit
 
-class SetCardView: UIView {
-    var card: SetCard = SetCard(color: .variant1, shape: .squiggle, number: .three, shading: .stripe) {
+class CardView: UIView {
+    var card: Card = Card(color: .variant1, shape: .squiggle, number: .three, shading: .stripe) {
         didSet {
             setNeedsDisplay(); setNeedsLayout()
         }
@@ -25,7 +25,7 @@ class SetCardView: UIView {
         }
     }
 
-    convenience init(frame: CGRect = .zero, card: SetCard) {
+    convenience init(frame: CGRect = .zero, card: Card) {
         self.init(frame: frame)
         self.card = card
     }
@@ -54,14 +54,14 @@ class SetCardView: UIView {
     private func configure() {
         backgroundColor = isFaceUp ? UIColor.faceOfCardColor : UIColor.backOfCardColor
         layer.borderColor = UIColor.cardBorderSelectionColor.cgColor
-        layer.borderWidth = isSelected ? SizeRatioOfOriginSetCard.lineWidth : 0
+        layer.borderWidth = isSelected ? SizeRatioOfOriginCard.lineWidth : 0
         layer.cornerRadius = cornerRadius
         layer.masksToBounds = true
     }
 }
 
-extension SetCardView {
-    private struct SizeRatioOfOriginSetCard {
+extension CardView {
+    private struct SizeRatioOfOriginCard {
         static let boundsHeight: CGFloat = 400
         static let boundsWidth: CGFloat = 250
         static let cornerRadiusCoefficient: CGFloat = 0.08
@@ -75,15 +75,15 @@ extension SetCardView {
     }
 
     private var scaleLineWidth: CGFloat {
-        scale * SizeRatioOfOriginSetCard.lineWidth
+        scale * SizeRatioOfOriginCard.lineWidth
     }
 
     private var scale: CGFloat {
-        SizeRatioOfOriginSetCard.scale * bounds.size.height / SizeRatioOfOriginSetCard.boundsHeight
+        SizeRatioOfOriginCard.scale * bounds.size.height / SizeRatioOfOriginCard.boundsHeight
     }
 
     private var cornerRadius: CGFloat {
-        bounds.size.height * SizeRatioOfOriginSetCard.cornerRadiusCoefficient
+        bounds.size.height * SizeRatioOfOriginCard.cornerRadiusCoefficient
     }
 
     private var coordinatesForShapesLayout: [(dx: CGFloat, dy: CGFloat)] {
@@ -105,7 +105,7 @@ extension SetCardView {
 
 // MARK: - CGContext
 fileprivate extension CGContext {
-    func fillFigure(shading: SetCard.Shading, color: UIColor, lineWidth: CGFloat) {
+    func fillFigure(shading: Card.Shading, color: UIColor, lineWidth: CGFloat) {
         switch shading {
         case .solid:
             color.setFill()
@@ -128,7 +128,7 @@ fileprivate extension CGContext {
         }
     }
 
-    func createFigurePath(figure: SetCard.Shape, scale: CGFloat, translate: (x: CGFloat, y: CGFloat)) {
+    func createFigurePath(figure: Card.Shape, scale: CGFloat, translate: (x: CGFloat, y: CGFloat)) {
         // translate and scale the figure path
         saveGState()
         translateBy(x: translate.x, y: translate.y)
