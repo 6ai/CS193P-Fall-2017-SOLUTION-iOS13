@@ -27,7 +27,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
         let layout = UICollectionViewFlowLayout()
-        window?.rootViewController = ImageGalleryController(collectionViewLayout: layout)
+        let splitViewController = UISplitViewController()
+        splitViewController.viewControllers = [UITableViewController(),
+                                               ImageGalleryController(collectionViewLayout: layout)]
+        splitViewController.preferredPrimaryColumnWidthFraction = 1 / 3
+        window?.rootViewController = splitViewController
     }
 
 
