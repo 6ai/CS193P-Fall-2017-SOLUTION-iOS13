@@ -16,13 +16,12 @@ class ImageGalleryController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        setupCollectionView()
+        configureCollectionView()
     }
 
-    private func setupCollectionView() {
+    private func configureCollectionView() {
         collectionView.register(ImageGalleryCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
-        collectionView.backgroundColor = UIColor.cyan
-
+        collectionView.backgroundColor = .systemPurple
     }
 }
 
@@ -32,12 +31,10 @@ extension ImageGalleryController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath as IndexPath)
-
         return cell
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-
         return 10
     }
 }
@@ -45,22 +42,24 @@ extension ImageGalleryController {
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: 100, height: 100)
-
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-
     }
 }
 
 
 extension UIView {
 
-    func anchor(top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil, paddingTop: CGFloat? = 0,
-                paddingLeft: CGFloat? = 0, paddingBottom: CGFloat? = 0, paddingRight: CGFloat? = 0, width: CGFloat? = nil, height: CGFloat? = nil) {
+    func anchor(top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil,
+                right: NSLayoutXAxisAnchor? = nil, paddingTop: CGFloat? = 0, paddingLeft: CGFloat? = 0,
+                paddingBottom: CGFloat? = 0, paddingRight: CGFloat? = 0, width: CGFloat? = nil,
+                height: CGFloat? = nil) {
 
         translatesAutoresizingMaskIntoConstraints = false
 

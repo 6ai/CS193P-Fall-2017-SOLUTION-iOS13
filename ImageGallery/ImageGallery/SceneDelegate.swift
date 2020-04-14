@@ -2,7 +2,7 @@
 //  SceneDelegate.swift
 //  ImageGallery
 //
-//  Created by ccoleridge on 10/04/2020.
+//  Created by ccoleridge.
 //  Copyright © 2020 ccoleridge. All rights reserved.
 //
 
@@ -26,12 +26,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
-        let layout = UICollectionViewFlowLayout()
-        let splitViewController = UISplitViewController()
-        splitViewController.viewControllers = [UITableViewController(),
-                                               ImageGalleryController(collectionViewLayout: layout)]
-        splitViewController.preferredPrimaryColumnWidthFraction = 1 / 3
-        window?.rootViewController = splitViewController
+        window?.rootViewController = ImageGallerySplitController()
     }
 
 

@@ -12,8 +12,10 @@ class ImageGallerySplitController: UISplitViewController {
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         let layout = UICollectionViewFlowLayout()
-        viewControllers = [ImageGalleryTableViewController(),
-                           ImageGalleryController(collectionViewLayout: layout)]
+
+        let detailViewController = UINavigationController(rootViewController: ImageGalleryTableViewController())
+        let masterViewController = ImageGalleryController(collectionViewLayout: layout)
+        viewControllers = [detailViewController, masterViewController]
     }
 
     required init?(coder: NSCoder) {
