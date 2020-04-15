@@ -12,6 +12,13 @@ import UIKit
 class ImageGalleryController: UICollectionViewController {
 
     fileprivate let cellIdentifier = "imageGalleryCollectionViewCell"
+    let images: [UIImage] = [
+        #imageLiteral(resourceName: "Image05"),
+        #imageLiteral(resourceName: "Image01"),
+        #imageLiteral(resourceName: "Image03"),
+        #imageLiteral(resourceName: "Image02"),
+        #imageLiteral(resourceName: "Image04")
+    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,12 +37,14 @@ class ImageGalleryController: UICollectionViewController {
 extension ImageGalleryController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath as IndexPath)
+        let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: cellIdentifier, for: indexPath as IndexPath) as! ImageGalleryCollectionViewCell
+        cell.image = images[indexPath.row]
         return cell
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        return images.count
     }
 }
 
@@ -44,7 +53,7 @@ extension ImageGalleryController {
 extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
+        return images[indexPath.row].size
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
