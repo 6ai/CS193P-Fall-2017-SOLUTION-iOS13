@@ -9,10 +9,12 @@
 import UIKit
 
 
-class ImageGalleryController: UICollectionViewController {
+class ImageGalleryController: UICollectionViewController, UIDropInteractionDelegate {
 
     fileprivate let cellIdentifier = "imageGalleryCollectionViewCell"
-    let images: [UIImage] = [
+    var imageFetcher: ImageFetcher!
+
+    var images: [UIImage] = [
         #imageLiteral(resourceName: "Image05"),
         #imageLiteral(resourceName: "Image01"),
         #imageLiteral(resourceName: "Image03"),
@@ -22,14 +24,51 @@ class ImageGalleryController: UICollectionViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        view.addInteraction(UIDropInteraction(delegate: self))
         configureCollectionView()
     }
+
 
     private func configureCollectionView() {
         collectionView.register(ImageGalleryCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         collectionView.backgroundColor = .systemPurple
     }
+}
+
+// MARK: - Drop items behavior
+
+extension ImageGalleryController {
+
+    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+        return UIDropProposal(operation: .copy)
+    }
+
+    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+        imageFetcher = ImageFetcher() { (url, image) in
+            DispatchQueue.main.async {
+                self.images.append(image)
+                self.collectionView.reloadData()
+            }
+        }
+
+        session.loadObjects(ofClass: NSURL.self) { nsurl in
+            if let url = nsurl.first as? URL {
+                self.imageFetcher.fetch(url)
+            }
+        }
+
+        session.loadObjects(ofClass: UIImage.self) { images in
+            if let image = images.first as? UIImage {
+                self.imageFetcher.backup = image
+            }
+        }
+
+    }
+
 }
 
 // MARK: - UICollectionViewDataSource & UICollectionViewDelegate
@@ -53,7 +92,10 @@ extension ImageGalleryController {
 extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return images[indexPath.row].size
+        let imageSize = images[indexPath.row].size
+        let imageRatio = imageSize.height / imageSize.width
+
+        return CGSize(width: 200, height: 200 * imageRatio)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
