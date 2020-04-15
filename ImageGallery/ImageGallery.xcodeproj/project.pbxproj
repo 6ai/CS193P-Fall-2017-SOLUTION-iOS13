@@ -11,6 +11,7 @@
 		B09484A3CF717988A8E845DB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B094858EBDDF2A33C7252847 /* SceneDelegate.swift */; };
 		B0948548069A5832D2034C88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0948E4EEDDFD1854A96BA9A /* LaunchScreen.storyboard */; };
 		B0948577158E589395B3238B /* ImageGalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09489483A6A78B91C6963F3 /* ImageGalleryTableViewController.swift */; };
+		B094888C724CE3F6A4E5EB7C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09489DA1F1B0ED4BBF87363 /* Utilities.swift */; };
 		B0948A6F3309BE7905E3ADD1 /* ImageGalleryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09487C8BDDCFF70433CEF86 /* ImageGalleryController.swift */; };
 		B0948C8341A2B726A24B8500 /* ImageGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0948277F1AF46F917D60EB9 /* ImageGalleryCollectionViewCell.swift */; };
 		B0948CE53E006FCEDF3E5889 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B094855886A242D87267D00F /* Assets.xcassets */; };
@@ -28,6 +29,7 @@
 		B09487C8BDDCFF70433CEF86 /* ImageGalleryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageGalleryController.swift; sourceTree = "<group>"; };
 		B09489483A6A78B91C6963F3 /* ImageGalleryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGalleryTableViewController.swift; sourceTree = "<group>"; };
 		B09489D1836AB4272C955CC0 /* ImageGallerySplitController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGallerySplitController.swift; sourceTree = "<group>"; };
+		B09489DA1F1B0ED4BBF87363 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 				B09489483A6A78B91C6963F3 /* ImageGalleryTableViewController.swift */,
 				B0948339B79440611C3F2F0C /* Supporting files */,
 				B09489D1836AB4272C955CC0 /* ImageGallerySplitController.swift */,
+				B09489DA1F1B0ED4BBF87363 /* Utilities.swift */,
 			);
 			path = ImageGallery;
 			sourceTree = "<group>";
@@ -156,6 +159,7 @@
 				B0948577158E589395B3238B /* ImageGalleryTableViewController.swift in Sources */,
 				B0948068ED1623E74CD32468 /* AppDelegate.swift in Sources */,
 				B0948E40FDB8837C6EA832C7 /* ImageGallerySplitController.swift in Sources */,
+				B094888C724CE3F6A4E5EB7C /* Utilities.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
