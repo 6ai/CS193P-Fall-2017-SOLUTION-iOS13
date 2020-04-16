@@ -9,17 +9,80 @@
 import UIKit
 
 
-class ImageGalleryController: UICollectionViewController, UIDropInteractionDelegate {
+class DetailCollectionView: UICollectionViewController,
+        UIDropInteractionDelegate, UICollectionViewDragDelegate,
+        UICollectionViewDropDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession
+            , at indexPath: IndexPath) -> [UIDragItem] {
+        session.localContext = collectionView
+        return dragItem(at: indexPath)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
+        return session.canLoadObjects(ofClass: UIImage.self)
+    }
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,
+                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        let isSelf = (session.localDragSession as? UICollectionView) == collectionView
+        return UICollectionViewDropProposal(operation: isSelf ? .move : .copy, intent: .insertAtDestinationIndexPath)
+    }
+
+    private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
+        if let image = (collectionView.cellForItem(at: indexPath) as? ImageGalleryCollectionViewCell)?.image {
+            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: image))
+            dragItem.localObject = image
+            return [dragItem]
+        } else {
+            return []
+        }
+    }
+
+    func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession,
+                        at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
+        return dragItem(at: indexPath)
+    }
+
+    func collectionView(
+            _ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        let destinationIndexPath = coordinator.destinationIndexPath ?? IndexPath(item: 0, section: 0)
+        for item in coordinator.items {
+            if let sourceIndexPath = item.sourceIndexPath,
+               let image = item.dragItem.localObject as? UIImage {
+                collectionView.performBatchUpdates({
+                    images.remove(at: sourceIndexPath.item)
+                    images.insert(image, at: destinationIndexPath.item)
+                    collectionView.deleteItems(at: [sourceIndexPath])
+                    collectionView.insertItems(at: [destinationIndexPath])
+                })
+                coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            } else {
+                let placeholderContext = coordinator.drop(
+                        item.dragItem, to: UICollectionViewDropPlaceholder(
+                        insertionIndexPath: destinationIndexPath, reuseIdentifier: "DropPlaceholderCell"))
+            }
+        }
+
+    }
+
 
     fileprivate let cellIdentifier = "imageGalleryCollectionViewCell"
     private var imageFetcher: ImageFetcher!
 
     var images: [UIImage] = [
-        UIImage(named: "Image05")!
+        UIImage(named: "Image05")!,
+        UIImage(named: "Image03")!,
+        UIImage(named: "Image02")!,
+        UIImage(named: "Image01")!,
+        UIImage(named: "Image04")!,
+        UIImage(named: "Image05")!,
     ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
         view.addInteraction(UIDropInteraction(delegate: self))
         configureCollectionView()
     }
@@ -29,11 +92,12 @@ class ImageGalleryController: UICollectionViewController, UIDropInteractionDeleg
         collectionView.register(ImageGalleryCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         collectionView.backgroundColor = .systemPurple
     }
+
 }
 
 // MARK: - UIDropInteractionDelegate
 
-extension ImageGalleryController {
+extension DetailCollectionView {
 
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
@@ -68,7 +132,7 @@ extension ImageGalleryController {
 
 // MARK: - UICollectionViewDataSource
 
-extension ImageGalleryController {
+extension DetailCollectionView {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
@@ -84,13 +148,13 @@ extension ImageGalleryController {
 
 // MARK: - UICollectionViewDelegate
 
-extension ImageGalleryController {
+extension DetailCollectionView {
 
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
+extension DetailCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let imageSize = images[indexPath.row].size
@@ -99,10 +163,10 @@ extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: 200, height: 200 * imageRatio)
     }
 
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
-                        insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
+//                        insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+//    }
 }
 
 

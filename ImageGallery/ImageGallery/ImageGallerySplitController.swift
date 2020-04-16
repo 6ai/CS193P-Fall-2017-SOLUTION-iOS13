@@ -13,7 +13,7 @@ class ImageGallerySplitController: UISplitViewController {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         let layout = UICollectionViewFlowLayout()
         let masterViewController = UINavigationController(rootViewController: ImageGalleryTableViewController())
-        let detailViewController = UINavigationController(rootViewController: ImageGalleryController(collectionViewLayout: layout))
+        let detailViewController = UINavigationController(rootViewController: DetailCollectionView(collectionViewLayout: layout))
         viewControllers = [masterViewController, detailViewController]
         preferredDisplayMode = .primaryOverlay
     }
