@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B0948068ED1623E74CD32468 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09481D6CDDD27ABC84FDE7E /* AppDelegate.swift */; };
+		B09481FEBFB995D6A7C9528A /* DropPlaceholderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09483AE8DA1133F97CD1B11 /* DropPlaceholderCell.swift */; };
 		B09484A3CF717988A8E845DB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B094858EBDDF2A33C7252847 /* SceneDelegate.swift */; };
 		B0948548069A5832D2034C88 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B0948E4EEDDFD1854A96BA9A /* LaunchScreen.storyboard */; };
 		B0948577158E589395B3238B /* ImageGalleryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09489483A6A78B91C6963F3 /* ImageGalleryTableViewController.swift */; };
@@ -23,6 +24,7 @@
 		B09480FE9FDB51B7CD50D60C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B09481D6CDDD27ABC84FDE7E /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B0948277F1AF46F917D60EB9 /* ImageGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
+		B09483AE8DA1133F97CD1B11 /* DropPlaceholderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropPlaceholderCell.swift; sourceTree = "<group>"; };
 		B094855886A242D87267D00F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B094858EBDDF2A33C7252847 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B094861AA6BA1035963A6FA3 /* ImageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,6 +82,7 @@
 				B0948339B79440611C3F2F0C /* Supporting files */,
 				B09489D1836AB4272C955CC0 /* ImageGallerySplitController.swift */,
 				B09489DA1F1B0ED4BBF87363 /* Utilities.swift */,
+				B09483AE8DA1133F97CD1B11 /* DropPlaceholderCell.swift */,
 			);
 			path = ImageGallery;
 			sourceTree = "<group>";
@@ -160,6 +163,7 @@
 				B0948068ED1623E74CD32468 /* AppDelegate.swift in Sources */,
 				B0948E40FDB8837C6EA832C7 /* ImageGallerySplitController.swift in Sources */,
 				B094888C724CE3F6A4E5EB7C /* Utilities.swift in Sources */,
+				B09481FEBFB995D6A7C9528A /* DropPlaceholderCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

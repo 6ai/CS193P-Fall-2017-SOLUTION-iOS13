@@ -10,7 +10,7 @@ import UIKit
 
 
 class DetailCollectionView: UICollectionViewController,
-        UIDropInteractionDelegate, UICollectionViewDragDelegate,
+        UICollectionViewDragDelegate,
         UICollectionViewDropDelegate {
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession
@@ -61,6 +61,16 @@ class DetailCollectionView: UICollectionViewController,
                 let placeholderContext = coordinator.drop(
                         item.dragItem, to: UICollectionViewDropPlaceholder(
                         insertionIndexPath: destinationIndexPath, reuseIdentifier: "DropPlaceholderCell"))
+                item.dragItem.itemProvider.loadObject(ofClass: UIImage.self) { (provider: NSItemProviderReading?, error: Error?) in
+                    if let image = provider as? UIImage {
+                        DispatchQueue.main.async {
+                            placeholderContext.commitInsertion(dataSourceUpdates:
+                            { insertionIndexPath in self.images.insert(image, at: insertionIndexPath.item) })
+                        }
+                    } else {
+                        placeholderContext.deletePlaceholder()
+                    }
+                }
             }
         }
 
@@ -81,15 +91,16 @@ class DetailCollectionView: UICollectionViewController,
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        collectionView.dragDelegate = self
-        collectionView.dropDelegate = self
-        view.addInteraction(UIDropInteraction(delegate: self))
+
         configureCollectionView()
     }
 
 
     private func configureCollectionView() {
         collectionView.register(ImageGalleryCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        collectionView.register(DropPlaceholderCell.self, forCellWithReuseIdentifier: "DropPlaceholderCell")
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
         collectionView.backgroundColor = .systemPurple
     }
 
@@ -98,36 +109,36 @@ class DetailCollectionView: UICollectionViewController,
 // MARK: - UIDropInteractionDelegate
 
 extension DetailCollectionView {
-
-    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        return UIDropProposal(operation: .copy)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        imageFetcher = ImageFetcher() { (url, image) in
-            DispatchQueue.main.async {
-                self.images.append(image)
-                self.collectionView.reloadData()
-            }
-        }
-
-        session.loadObjects(ofClass: NSURL.self) { nsurl in
-            if let url = nsurl.first as? URL {
-                self.imageFetcher.fetch(url)
-            }
-        }
-
-        session.loadObjects(ofClass: UIImage.self) { images in
-            if let image = images.first as? UIImage {
-                self.imageFetcher.backup = image
-            }
-        }
-
-    }
+//
+//    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
+//        return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
+//    }
+//
+//    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
+//        return UIDropProposal(operation: .copy)
+//    }
+//
+//    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
+//        imageFetcher = ImageFetcher() { (url, image) in
+//            DispatchQueue.main.async {
+//                self.images.append(image)
+//                self.collectionView.reloadData()
+//            }
+//        }
+//
+//        session.loadObjects(ofClass: NSURL.self) { nsurl in
+//            if let url = nsurl.first as? URL {
+//                self.imageFetcher.fetch(url)
+//            }
+//        }
+//
+//        session.loadObjects(ofClass: UIImage.self) { images in
+//            if let image = images.first as? UIImage {
+//                self.imageFetcher.backup = image
+//            }
+//        }
+//
+//    }
 }
 
 // MARK: - UICollectionViewDataSource
