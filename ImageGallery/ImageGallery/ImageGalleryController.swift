@@ -12,14 +12,10 @@ import UIKit
 class ImageGalleryController: UICollectionViewController, UIDropInteractionDelegate {
 
     fileprivate let cellIdentifier = "imageGalleryCollectionViewCell"
-    var imageFetcher: ImageFetcher!
+    private var imageFetcher: ImageFetcher!
 
     var images: [UIImage] = [
-        #imageLiteral(resourceName: "Image05"),
-        #imageLiteral(resourceName: "Image01"),
-        #imageLiteral(resourceName: "Image03"),
-        #imageLiteral(resourceName: "Image02"),
-        #imageLiteral(resourceName: "Image04")
+        UIImage(named: "Image05")!
     ]
 
     override func viewDidLoad() {
@@ -35,7 +31,7 @@ class ImageGalleryController: UICollectionViewController, UIDropInteractionDeleg
     }
 }
 
-// MARK: - Drop items behavior
+// MARK: - UIDropInteractionDelegate
 
 extension ImageGalleryController {
 
@@ -68,10 +64,9 @@ extension ImageGalleryController {
         }
 
     }
-
 }
 
-// MARK: - UICollectionViewDataSource & UICollectionViewDelegate
+// MARK: - UICollectionViewDataSource
 
 extension ImageGalleryController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
@@ -85,6 +80,12 @@ extension ImageGalleryController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return images.count
     }
+}
+
+// MARK: - UICollectionViewDelegate
+
+extension ImageGalleryController {
+
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
@@ -115,23 +116,19 @@ extension UIView {
         translatesAutoresizingMaskIntoConstraints = false
 
         if let top = top {
-            topAnchor.constraint(equalTo: top, constant: paddingTop!).isActive = true
+            topAnchor.constraint(equalTo: top, constant: paddingTop ?? 0).isActive = true
         }
 
         if let left = left {
-            leftAnchor.constraint(equalTo: left, constant: paddingLeft!).isActive = true
+            leftAnchor.constraint(equalTo: left, constant: paddingLeft ?? 0).isActive = true
         }
 
         if let bottom = bottom {
-            if let paddingBottom = paddingBottom {
-                bottomAnchor.constraint(equalTo: bottom, constant: -paddingBottom).isActive = true
-            }
+            bottomAnchor.constraint(equalTo: bottom, constant: -(paddingBottom ?? 0)).isActive = true
         }
 
         if let right = right {
-            if let paddingRight = paddingRight {
-                rightAnchor.constraint(equalTo: right, constant: -paddingRight).isActive = true
-            }
+            rightAnchor.constraint(equalTo: right, constant: -(paddingRight ?? 0)).isActive = true
         }
 
         if let width = width {

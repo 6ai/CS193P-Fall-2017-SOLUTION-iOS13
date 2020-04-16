@@ -12,6 +12,10 @@ class ImageGalleryTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        print(navigationController)
+
+        let addBarItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        navigationItem.rightBarButtonItem = addBarItem
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
