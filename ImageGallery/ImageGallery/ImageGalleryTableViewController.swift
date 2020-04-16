@@ -10,11 +10,14 @@ import UIKit
 
 class ImageGalleryTableViewController: UITableViewController {
 
+    var imageGalleries = ["One", "Two", "Three"]
+    let cellId = "reuseIdentifier"
+
     override func viewDidLoad() {
         super.viewDidLoad()
         print(navigationController)
-
-        let addBarItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: nil)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        let addBarItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarItemPressed))
         navigationItem.rightBarButtonItem = addBarItem
 
         // Uncomment the following line to preserve selection between presentations
@@ -24,27 +27,32 @@ class ImageGalleryTableViewController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
-    // MARK: - Table view data source
+    @objc func addBarItemPressed() {
+        imageGalleries += ["Untitled".madeUnique(withRespectTo: imageGalleries)]
+        tableView.reloadData()
+    }
+
+    // MARK: - UITableViewDataSource
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return imageGalleries.count
     }
 
-    /*
+
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UITableViewCell
 
         // Configure the cell...
-
+        cell.textLabel?.text = imageGalleries[indexPath.row]
         return cell
     }
-    */
+
 
     /*
     // Override to support conditional editing of the table view.
