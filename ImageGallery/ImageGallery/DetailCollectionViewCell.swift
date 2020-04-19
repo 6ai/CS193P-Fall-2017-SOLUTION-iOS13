@@ -15,28 +15,18 @@ class DetailCollectionViewCell: UICollectionViewCell {
     private(set) var height: CGFloat?
 
     private var image: UIImage?
-
+    private let fetcher: ImageFetcher = ImageFetcher.shared
     var imageURL: URL? {
         didSet {
-            image = nil
-            fetchImage()
-        }
-    }
-
-    private func fetchImage() {
-        if let url = imageURL {
-            let urlContents = try? Data(contentsOf: url)
-            if let imageData = urlContents {
-                image = UIImage(data: imageData)
-                print("log: image.size: \(image?.size)")
-                width = image?.size.width
-                height = image?.size.height
+            if let imageURL = imageURL {
+                image = fetcher.fetchImage(with: imageURL)
             }
         }
     }
 
     // MARK: - Lifecycle
     override func layoutSubviews() {
+        print(#function, Self.self)
         super.layoutSubviews()
         subviews.forEach({ $0.removeFromSuperview() })
         if image != nil {
