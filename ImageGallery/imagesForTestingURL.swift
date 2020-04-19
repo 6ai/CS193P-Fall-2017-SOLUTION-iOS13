@@ -4,10 +4,8 @@
 //
 
 import Foundation
-
-
 struct Images {
-    let urls = [
+    static let urls: [URL?] = [
         URL(string: "https://images.unsplash.com/photo-1587204378503-d8cded1b30ed?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80"),
         URL(string: "https://images.unsplash.com/photo-1587315119275-80455dfc9d64?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80"),
         URL(string: "https://images.unsplash.com/photo-1587299071601-453151949e09?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=934&q=80"),
