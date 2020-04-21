@@ -10,12 +10,13 @@ import UIKit
 
 class ImageGalleryTableViewController: UITableViewController {
 
-    var imageGalleries = ["One", "Two", "Three"]
+    var imageGalleries: [ImageGallery] = [ImageGallery(imageURL: nil, name: "One"),
+                                          ImageGallery(imageURL: nil, name: "Two"),
+                                          ImageGallery(imageURL: nil, name: "Three")]
     let cellId = "reuseIdentifier"
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(navigationController)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         let addBarItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarItemPressed))
         navigationItem.rightBarButtonItem = addBarItem
@@ -28,7 +29,9 @@ class ImageGalleryTableViewController: UITableViewController {
     }
 
     @objc func addBarItemPressed() {
-        imageGalleries += ["Untitled".madeUnique(withRespectTo: imageGalleries)]
+        let galleryName = "Untitled"
+        let imageGallery = ImageGallery(imageURL: nil, name: galleryName)
+        imageGalleries.append(imageGallery)
         tableView.reloadData()
     }
 
@@ -44,12 +47,16 @@ class ImageGalleryTableViewController: UITableViewController {
         return imageGalleries.count
     }
 
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(#function)
+        splitViewController?.showDetailViewController(imageGalleries[indexPath.row].detailViewController, sender: nil)
+    }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
 
         // Configure the cell...
-        cell.textLabel?.text = imageGalleries[indexPath.row]
+        cell.textLabel?.text = imageGalleries[indexPath.row].name
         return cell
     }
 
