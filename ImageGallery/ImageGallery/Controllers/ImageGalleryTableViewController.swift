@@ -49,6 +49,7 @@ class ImageGalleryTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(#function)
+        tableView.deselectRow(at: indexPath, animated: true)
         splitViewController?.showDetailViewController(imageGalleries[indexPath.row].detailViewController, sender: nil)
     }
 
