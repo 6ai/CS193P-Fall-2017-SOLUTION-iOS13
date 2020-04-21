@@ -8,7 +8,7 @@
 
 import UIKit
 
-class DetailCollectionViewCell: UICollectionViewCell {
+class ImageCell: UICollectionViewCell {
 
     // MARK: - Properties
     private(set) var width: CGFloat?
