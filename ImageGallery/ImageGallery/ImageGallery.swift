@@ -7,22 +7,16 @@ import UIKit
 
 class ImageGallery {
 
-    let detailViewController: UINavigationController = {
+    let navigationVC: UINavigationController = {
         let layout = UICollectionViewFlowLayout()
-        let detailViewController = UINavigationController(rootViewController: ImageGalleryDetailController(collectionViewLayout: layout))
-        return detailViewController
+        let controller = ImageGalleryController(collectionViewLayout: layout)
+        let navigationVC = UINavigationController(rootViewController: controller)
+        return navigationVC
     }()
 
-    var imageURL: [URL] = []
-    var name: String {
-        didSet {
-            detailViewController.navigationBar.topItem?.title = name
-        }
-    }
+    var name: String
 
-    init(imageURL: [URL]?, name: String) {
-        print("________________", #function)
-        self.imageURL = imageURL ?? []
+    init(name: String) {
         self.name = name
     }
 }
