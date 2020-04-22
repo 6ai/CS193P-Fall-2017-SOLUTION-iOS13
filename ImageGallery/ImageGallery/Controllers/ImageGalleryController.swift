@@ -9,7 +9,17 @@
 import UIKit
 
 
-class ImageGalleryDetailController: UICollectionViewController, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+class ImageGalleryController: UICollectionViewController, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+
+    override func viewWillDisappear(_ animated: Bool) {
+        self.navigationController?.setNavigationBarHidden(false, animated: animated);
+        super.viewWillDisappear(animated)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print(#function, indexPath.row)
@@ -17,6 +27,8 @@ class ImageGalleryDetailController: UICollectionViewController, UICollectionView
             segueToImageDetail(with: image)
         }
     }
+
+    var imagesURL: [URL] = []
 
     func segueToImageDetail(with image: UIImage) {
         let imageDetailController = ImageDetailController()
@@ -26,8 +38,6 @@ class ImageGalleryDetailController: UICollectionViewController, UICollectionView
 
     fileprivate let cellIdentifier = "imageGalleryCollectionViewCell"
     private var fetcher: ImageFetcher = ImageFetcher.shared
-
-    var imagesURL = Images.urls
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +49,7 @@ class ImageGalleryDetailController: UICollectionViewController, UICollectionView
         collectionView.register(ImageCell.self, forCellWithReuseIdentifier: cellIdentifier)
 //        collectionView.dragDelegate = self
 //        collectionView.dropDelegate = self
+        view.addInteraction(UIDropInteraction(delegate: self))
         collectionView.backgroundColor = .systemPurple
     }
 
@@ -46,7 +57,7 @@ class ImageGalleryDetailController: UICollectionViewController, UICollectionView
 
 // MARK: - UIDropInteractionDelegate
 
-extension ImageGalleryDetailController {
+extension ImageGalleryController: UIDropInteractionDelegate {
 
     func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
         print(#function, session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self))
@@ -59,32 +70,19 @@ extension ImageGalleryDetailController {
     }
 
     func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-//        imageFetcher = ImageFetcher() { (url, image) in
-//            DispatchQueue.main.async {
-//                self.images.append(image)
-//                self.collectionView.reloadData()
-//            }
-//        }
-
+        print(#function)
         session.loadObjects(ofClass: NSURL.self) { nsurl in
             if let url = nsurl.first as? URL {
-//                self.imageFetcher.fetch(url)
-                print(url)
+                self.imagesURL.append(url)
+                self.collectionView.reloadData()
             }
         }
-
-//        session.loadObjects(ofClass: UIImage.self) { images in
-//            if let image = images.first as? UIImage {
-//                self.imageFetcher.backup = image
-//            }
-//        }
-
     }
 }
 
 // MARK: - UICollectionViewDataSource
 
-extension ImageGalleryDetailController {
+extension ImageGalleryController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
@@ -100,13 +98,13 @@ extension ImageGalleryDetailController {
 
 // MARK: - UICollectionViewDelegate
 
-extension ImageGalleryDetailController {
+extension ImageGalleryController {
 
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension ImageGalleryDetailController: UICollectionViewDelegateFlowLayout {
+extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
 
@@ -125,7 +123,7 @@ extension ImageGalleryDetailController: UICollectionViewDelegateFlowLayout {
 
 // MARK: - Collection View Drag and Drop
 
-extension ImageGalleryDetailController {
+extension ImageGalleryController {
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
