@@ -28,13 +28,13 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDragDe
         }
     }
 
-    var imagesURL: [URL] = []
-
     func segueToImageDetail(with image: UIImage) {
         let imageDetailController = ImageDetailController()
         imageDetailController.image = image
         navigationController?.pushViewController(imageDetailController, animated: true)
     }
+
+    fileprivate var imagesURL: [URL] = []
 
     fileprivate let cellIdentifier = "imageGalleryCollectionViewCell"
     private var fetcher: ImageFetcher = ImageFetcher.shared
@@ -87,12 +87,13 @@ extension ImageGalleryController {
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: cellIdentifier, for: indexPath as IndexPath) as! ImageCell
-        cell.imageURL = imagesURL[indexPath.row]
+
+        cell.image = fetcher.fetchImage(with: imagesURL[indexPath.row])
         return cell
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return imagesURL.count
+        imagesURL.count
     }
 }
 
@@ -117,7 +118,7 @@ extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     }
 }
 
@@ -198,6 +199,3 @@ extension ImageGalleryController {
     }
 
 }
-
-
-

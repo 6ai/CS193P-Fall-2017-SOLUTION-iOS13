@@ -8,17 +8,19 @@
 
 import UIKit
 
-class ImageGalleryTableViewController: UITableViewController {
-    var imageGalleries: [ImageGallery] = [ImageGallery(imageURL: [Images.urls[0], Images.urls[4]], name: "One"),
-                                          ImageGallery(imageURL: [Images.urls[1], Images.urls[3]], name: "Two"),
-                                          ImageGallery(imageURL: [Images.urls[2]], name: "Three")]
+class MasterController: UITableViewController {
+    var imageGalleries: [ImageGallery] = []
     let cellId = "reuseIdentifier"
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
         let addBarItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addBarItemPressed))
         navigationItem.rightBarButtonItem = addBarItem
+        createImageGallery()
+        segueToImageGallery(with: 0)
+
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -28,11 +30,15 @@ class ImageGalleryTableViewController: UITableViewController {
     }
 
     @objc func addBarItemPressed() {
+        createImageGallery()
+    }
+
+    private func createImageGallery() {
         let imageGalleriesExistNames = imageGalleries.map {
             $0.name
         }
-        let name = "Untitled".madeUnique(withRespectTo: imageGalleriesExistNames)
-        let imageGallery = ImageGallery(imageURL: nil, name: name)
+        let uniqueGalleryName = "Untitled".madeUnique(withRespectTo: imageGalleriesExistNames)
+        let imageGallery = ImageGallery(name: uniqueGalleryName)
         imageGalleries.append(imageGallery)
         tableView.reloadData()
     }
@@ -52,7 +58,11 @@ class ImageGalleryTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(#function)
         tableView.deselectRow(at: indexPath, animated: true)
-        splitViewController?.showDetailViewController(imageGalleries[indexPath.row].navigationVC, sender: nil)
+        segueToImageGallery(with: indexPath.row)
+    }
+
+    private func segueToImageGallery(with index: Int) {
+        splitViewController?.showDetailViewController(imageGalleries[index].navigationVC, sender: nil)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

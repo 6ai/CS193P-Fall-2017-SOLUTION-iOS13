@@ -137,7 +137,7 @@ extension UIImage {
     }
 
     func storeLocallyAsJPEG(named name: String) -> URL? {
-        if let imageData = UIImageJPEGRepresentation(self, 1.0) {
+        if let imageData = self.jpegData(compressionQuality: 1.0) {
             if let url = UIImage.urlToStoreLocallyAsJPEG(named: name) {
                 do {
                     try imageData.write(to: url)
@@ -190,7 +190,7 @@ extension NSAttributedString {
 }
 
 extension String {
-    func attributedString(withTextStyle style: UIFontTextStyle, ofSize size: CGFloat) -> NSAttributedString {
+    func attributedString(withTextStyle style: UIFont.TextStyle, ofSize size: CGFloat) -> NSAttributedString {
         let font = UIFontMetrics(forTextStyle: .body).scaledFont(for: UIFont.preferredFont(forTextStyle: .body).withSize(size))
         return NSAttributedString(string: self, attributes: [.font: font])
     }
@@ -241,5 +241,40 @@ extension UIView {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image
+    }
+}
+
+extension UIView {
+
+    func anchor(top: NSLayoutYAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil,
+                right: NSLayoutXAxisAnchor? = nil, paddingTop: CGFloat? = 0, paddingLeft: CGFloat? = 0,
+                paddingBottom: CGFloat? = 0, paddingRight: CGFloat? = 0, width: CGFloat? = nil,
+                height: CGFloat? = nil) {
+
+        translatesAutoresizingMaskIntoConstraints = false
+
+        if let top = top {
+            topAnchor.constraint(equalTo: top, constant: paddingTop ?? 0).isActive = true
+        }
+
+        if let left = left {
+            leftAnchor.constraint(equalTo: left, constant: paddingLeft ?? 0).isActive = true
+        }
+
+        if let bottom = bottom {
+            bottomAnchor.constraint(equalTo: bottom, constant: -(paddingBottom ?? 0)).isActive = true
+        }
+
+        if let right = right {
+            rightAnchor.constraint(equalTo: right, constant: -(paddingRight ?? 0)).isActive = true
+        }
+
+        if let width = width {
+            widthAnchor.constraint(equalToConstant: width).isActive = true
+        }
+
+        if let height = height {
+            heightAnchor.constraint(equalToConstant: height).isActive = true
+        }
     }
 }
