@@ -34,9 +34,7 @@ class MasterController: UITableViewController {
     }
 
     private func createImageGallery() {
-        let imageGalleriesExistNames = imageGalleries.map {
-            $0.name
-        }
+        let imageGalleriesExistNames = imageGalleries.map { $0.name }
         let uniqueGalleryName = "Untitled".madeUnique(withRespectTo: imageGalleriesExistNames)
         let imageGallery = ImageGallery(name: uniqueGalleryName)
         imageGalleries.append(imageGallery)
@@ -56,7 +54,6 @@ class MasterController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(#function)
         tableView.deselectRow(at: indexPath, animated: true)
         segueToImageGallery(with: indexPath.row)
     }
@@ -89,7 +86,8 @@ class MasterController: UITableViewController {
             // Delete the row from the data source
             imageGalleries.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
+        }
+        else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
