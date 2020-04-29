@@ -29,9 +29,7 @@ class MasterController: UITableViewController {
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
-    @objc func addBarItemPressed() {
-        createImageGallery()
-    }
+    @objc func addBarItemPressed() { createImageGallery() }
 
     private func createImageGallery() {
         let imageGalleriesExistNames = imageGalleries.map { $0.name }
@@ -86,8 +84,7 @@ class MasterController: UITableViewController {
             // Delete the row from the data source
             imageGalleries.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-        }
-        else if editingStyle == .insert {
+        } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }

@@ -17,7 +17,6 @@
 		B09489BACFF3DABFCDA018A3 /* MasterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B094848EFCE0A1E4D74E8C37 /* MasterController.swift */; };
 		B0948A2D7B835A7CF80A21E1 /* ImageDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B094800075106AA5A19E172B /* ImageDetailController.swift */; };
 		B0948C15BA7EDBA2D23AFF1C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B094809AF1352777BD135F05 /* AppDelegate.swift */; };
-		B0948CB9387BE1A63B1E76D0 /* ImageGalleryDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09481F540EFD4AD0FCA3E8E /* ImageGalleryDataModel.swift */; };
 		B0948EDA744938B4C780A34A /* ImageGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0948B5EFE43BC98DE8075ED /* ImageGallery.swift */; };
 /* End PBXBuildFile section */
 
@@ -26,7 +25,6 @@
 		B094803470F1B30BDD297EAC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
 		B094809AF1352777BD135F05 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B09480A802867601F80F05E3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		B09481F540EFD4AD0FCA3E8E /* ImageGalleryDataModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGalleryDataModel.swift; sourceTree = "<group>"; };
 		B0948319D66137515C5321F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B09483A1427147624E47E2C1 /* DropPlaceholderCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DropPlaceholderCell.swift; sourceTree = "<group>"; };
 		B094848EFCE0A1E4D74E8C37 /* MasterController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MasterController.swift; sourceTree = "<group>"; };
@@ -84,7 +82,6 @@
 				B0948D98D8E45FB3AA3F84AA /* Views */,
 				B0948C8BC82D02E802CDD91F /* Models */,
 				B09486D8DD0B3A02137994E6 /* Supporting files */,
-				B09481F540EFD4AD0FCA3E8E /* ImageGalleryDataModel.swift */,
 			);
 			path = ImageGallery;
 			sourceTree = "<group>";
@@ -195,7 +192,6 @@
 				B0948224F8B70712ADA8BD24 /* Utilities.swift in Sources */,
 				B0948C15BA7EDBA2D23AFF1C /* AppDelegate.swift in Sources */,
 				B0948EDA744938B4C780A34A /* ImageGallery.swift in Sources */,
-				B0948CB9387BE1A63B1E76D0 /* ImageGalleryDataModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

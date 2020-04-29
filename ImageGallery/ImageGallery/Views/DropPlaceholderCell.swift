@@ -2,8 +2,8 @@
 //  DropPlaceholderCell.swift
 //  ImageGallery
 //
-//  Created by iloveass on 17/04/2020.
-//  Copyright © 2020 yasuhiko2. All rights reserved.
+//  Created by 6ai on 17/04/2020.
+//  Copyright © 2020 6ai. All rights reserved.
 //
 
 import UIKit
@@ -17,6 +17,7 @@ class DropPlaceholderCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(loadingActivityIndicator)
+        layoutSubviews()
     }
 
     required init?(coder: NSCoder) {
