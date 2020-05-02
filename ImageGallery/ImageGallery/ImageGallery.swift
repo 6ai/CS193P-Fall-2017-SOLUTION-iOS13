@@ -1,6 +1,6 @@
 //
-// Created by ccoleridge on 22/04/2020.
-// Copyright (c) 2020 ccoleridge. All rights reserved.
+// Created by 6ai on 22/04/2020.
+// Copyright (c) 2020 6ai. All rights reserved.
 //
 
 import UIKit

@@ -49,10 +49,10 @@ class ImageCell: UICollectionViewCell {
 
         addSubview(imageView)
         imageView.addSubview(activityIndicator)
-        setupConstraints()
+        setupAutolayout()
     }
 
-    private func setupConstraints() {
+    private func setupAutolayout() {
         imageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
         activityIndicator.anchor(top: imageView.topAnchor, left: imageView.leftAnchor, bottom: imageView.bottomAnchor, right: imageView.rightAnchor)
 
