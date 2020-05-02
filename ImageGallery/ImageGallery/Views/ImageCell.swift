@@ -2,8 +2,8 @@
 //  ImageGalleryCollectionViewCell.swift
 //  ImageGallery
 //
-//  Created by ccoleridge on 11/04/2020.
-//  Copyright © 2020 ccoleridge. All rights reserved.
+//  Created by 6ai on 11/04/2020.
+//  Copyright © 2020 6ai. All rights reserved.
 //
 
 import UIKit
@@ -14,30 +14,54 @@ class ImageCell: UICollectionViewCell {
     private(set) var width: CGFloat?
     private(set) var height: CGFloat?
 
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        image?.draw(in: bounds)
+    private let activityIndicator = UIActivityIndicatorView()
+
+    var imageURL: URL? { didSet { fetchImage() } }
+    private var image: UIImage? {
+        get {
+            return imageView.image
+        }
+        set {
+            activityIndicator.stopAnimating()
+            imageView.image = newValue
+            imageView.sizeToFit()
+        }
     }
 
-    var image: UIImage?
+    private var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .white
+        return imageView
+    }()
 
-    // MARK: - Lifecycle
-//    override func layoutSubviews() {
-//        print(#function, Self.self)
-//        super.layoutSubviews()
-//        subviews.forEach({ $0.removeFromSuperview() })
-//        if image != nil {
-//            let imageView = UIImageView(image: image)
-//            addSubview(imageView)
-//            imageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
-//        }
-//    }
+    private func fetchImage() {
+        activityIndicator.startAnimating()
+        DispatchQueue.global(qos: .utility).async {
+            guard let url = self.imageURL, let imageData = try? Data(contentsOf: url) else { return }
+            DispatchQueue.main.async {
+                self.image = UIImage(data: imageData)
+            }
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
+
+        addSubview(imageView)
+        imageView.addSubview(activityIndicator)
+        setupConstraints()
+    }
+
+    private func setupConstraints() {
+        imageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
+        activityIndicator.anchor(top: imageView.topAnchor, left: imageView.leftAnchor, bottom: imageView.bottomAnchor, right: imageView.rightAnchor)
+
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+
+
