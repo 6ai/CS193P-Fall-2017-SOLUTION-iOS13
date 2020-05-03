@@ -9,7 +9,7 @@
 import UIKit
 
 class MasterController: UITableViewController {
-    var imageGalleries: [ImageGallery] = []
+    var imageGalleries: [Gallery] = []
     let cellId = "reuseIdentifier"
 
     override func viewDidLoad() {
@@ -34,7 +34,7 @@ class MasterController: UITableViewController {
     private func createImageGallery() {
         let imageGalleriesExistNames = imageGalleries.map { $0.name }
         let uniqueGalleryName = "Untitled".madeUnique(withRespectTo: imageGalleriesExistNames)
-        let imageGallery = ImageGallery(name: uniqueGalleryName)
+        let imageGallery = Gallery(name: uniqueGalleryName)
         imageGalleries.append(imageGallery)
         tableView.reloadData()
     }

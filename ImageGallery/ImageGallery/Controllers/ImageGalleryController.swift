@@ -21,7 +21,8 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDragDe
     }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        segueToImageDetail(with: imagesURL[indexPath.row])
+        let url: URL = images[indexPath.row].url
+        segueToImageDetail(with: url)
     }
 
     func segueToImageDetail(with url: URL) {
@@ -30,7 +31,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDragDe
         navigationController?.pushViewController(imageDetailController, animated: true)
     }
 
-    fileprivate var imagesURL: [URL] = []
+    fileprivate var images: [Image] = []
 
     private let cellIdentifier = "imageGalleryCollectionViewCell"
 
@@ -44,37 +45,12 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDragDe
 
     private func configureCollectionView() {
         collectionView.register(ImageCell.self, forCellWithReuseIdentifier: cellIdentifier)
-//        collectionView.dragDelegate = self
-//        collectionView.dropDelegate = self
-        view.addInteraction(UIDropInteraction(delegate: self))
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
+//        view.addInteraction(UIDropInteraction(delegate: self))
         collectionView.backgroundColor = .systemPurple
     }
 
-}
-
-// MARK: - UIDropInteractionDelegate
-
-extension ImageGalleryController: UIDropInteractionDelegate {
-
-    func dropInteraction(_ interaction: UIDropInteraction, canHandle session: UIDropSession) -> Bool {
-        print(#function, session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self))
-        return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, sessionDidUpdate session: UIDropSession) -> UIDropProposal {
-        print(#function)
-        return UIDropProposal(operation: .copy)
-    }
-
-    func dropInteraction(_ interaction: UIDropInteraction, performDrop session: UIDropSession) {
-        print(#function)
-        session.loadObjects(ofClass: NSURL.self) { nsurl in
-            if let url = nsurl.first as? URL {
-                self.imagesURL.append(url)
-                self.collectionView.reloadData()
-            }
-        }
-    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -134,7 +110,7 @@ extension ImageGalleryController {
 
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         print(#function, session.canLoadObjects(ofClass: UIImage.self), session.canLoadObjects(ofClass: NSURL.self))
-        return session.canLoadObjects(ofClass: URL.self)
+        return session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self)
     }
 
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
@@ -144,10 +120,10 @@ extension ImageGalleryController {
     }
 
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        if let image = fetcher.fetchImage(with: imagesURL[indexPath.row]) {
-            print(#function)
-            let dragItem = UIDragItem(itemProvider: NSItemProvider(object: image))
-            dragItem.localObject = image
+        let url = imagesURL[indexPath.row]
+        if let provider = NSItemProvider(contentsOf: url) {
+            let dragItem = UIDragItem(itemProvider: provider)
+            dragItem.localObject = url
             return [dragItem]
         } else {
             return []
@@ -170,7 +146,7 @@ extension ImageGalleryController {
             } else {
                 // Drag and drop between apps
                 let placeholderContext = coordinator.drop(item.dragItem, to: UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath, reuseIdentifier: cellIdentifier))
-                item.dragItem.itemProvider.loadObject(ofClass: UIImage.self) { (provider: NSItemProviderReading?, error: Error?) in
+                item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (provider: NSItemProviderReading?, error: Error?) in
                     if let url = provider as? URL {
                         DispatchQueue.main.async {
                             placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in self.imagesURL.insert(url, at: insertionIndexPath.item) })
