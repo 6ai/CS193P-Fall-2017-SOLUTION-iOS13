@@ -2,8 +2,8 @@
 //  ImageGalleryTableViewController.swift
 //  ImageGallery
 //
-//  Created by ccoleridge on 14/04/2020.
-//  Copyright © 2020 ccoleridge. All rights reserved.
+//  Created by 6ai on 14/04/2020.
+//  Copyright © 2020 6ai. All rights reserved.
 //
 
 import UIKit

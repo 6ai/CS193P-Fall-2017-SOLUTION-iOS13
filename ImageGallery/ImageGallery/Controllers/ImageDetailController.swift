@@ -68,7 +68,8 @@ class ImageDetailController: UIViewController, UIScrollViewDelegate {
 
     private func setupAutolayout() {
 
-        activityIndicator.anchor(top: imageView.topAnchor, left: imageView.leftAnchor, bottom: imageView.bottomAnchor, right: imageView.rightAnchor)
+        activityIndicator.anchor(top: imageView.topAnchor, left: imageView.leftAnchor,
+                bottom: imageView.bottomAnchor, right: imageView.rightAnchor)
 
         let imageViewSize = imageView.frame.size
 
@@ -80,7 +81,10 @@ class ImageDetailController: UIViewController, UIScrollViewDelegate {
         scrollViewWidth?.isActive = true
         scrollViewHeight?.isActive = true
 
-        NSLayoutConstraint.activate([scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor), scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor)])
+        NSLayoutConstraint.activate(
+                [scrollView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                 scrollView.centerYAnchor.constraint(equalTo: view.centerYAnchor)]
+        )
 
     }
 }

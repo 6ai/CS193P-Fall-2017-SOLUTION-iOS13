@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  ImageGallery
 //
-//  Created by ccoleridge on 10/04/2020.
-//  Copyright © 2020 ccoleridge. All rights reserved.
+//  Created by 6ai on 10/04/2020.
+//  Copyright © 2020 6ai. All rights reserved.
 //
 
 import UIKit
