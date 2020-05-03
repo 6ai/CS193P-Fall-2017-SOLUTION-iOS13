@@ -5,7 +5,7 @@
 
 import UIKit
 
-class ImageGallery {
+class Gallery {
 
     let navigationVC: UINavigationController = {
         let layout = UICollectionViewFlowLayout()
