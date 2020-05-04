@@ -17,7 +17,7 @@ class ImageCell: UICollectionViewCell {
     private let activityIndicator = UIActivityIndicatorView()
 
     var imageURL: URL? { didSet { fetchImage() } }
-    private var image: UIImage? {
+    var image: UIImage? {
         get {
             return imageView.image
         }
