@@ -5,7 +5,7 @@
 
 import UIKit
 
-class ImageDetailController: UIViewController, UIScrollViewDelegate {
+class ImageController: UIViewController, UIScrollViewDelegate {
     private var imageView = UIImageView()
     private let activityIndicator = UIActivityIndicatorView()
 

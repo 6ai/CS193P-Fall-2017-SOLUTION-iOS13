@@ -8,9 +8,9 @@
 
 import UIKit
 
-class MasterController: UITableViewController {
+class ImageGalleryTableViewController: UITableViewController {
     var imageGalleries: [Gallery] = []
-    let cellId = "reuseIdentifier"
+    let cellId = "cellId"
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -9,10 +9,12 @@
 import UIKit
 
 
-class ImageGalleryController: UICollectionViewController, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+class ImageGalleryCollectionViewController: UICollectionViewController,
+        UICollectionViewDragDelegate, UICollectionViewDropDelegate {
 
     override func viewWillDisappear(_ animated: Bool) {
-        self.navigationController?.setNavigationBarHidden(false, animated: animated); super.viewWillDisappear(animated)
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -26,12 +28,23 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDragDe
     }
 
     func segueToImageDetail(with url: URL) {
-        let imageDetailController = ImageDetailController()
+        let imageDetailController = ImageController()
         imageDetailController.imageURL = url
         navigationController?.pushViewController(imageDetailController, animated: true)
     }
 
     private var images: [Image] = []
+    private var cellWidth: CGFloat = 200 {
+        didSet { collectionView.reloadData() }
+    }
+
+    @objc private func scaleCellWidth(_ recognizer: UIPinchGestureRecognizer) {
+        // todo pitch gesture works
+        switch recognizer.state {
+        case .ended: break
+        default: break
+        }
+    }
 
     private let cellIdentifier = "imageGalleryCollectionViewCell"
 
@@ -42,11 +55,13 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDragDe
         configureCollectionView()
     }
 
-
     private func configureCollectionView() {
         collectionView.register(ImageCell.self, forCellWithReuseIdentifier: cellIdentifier)
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
+
+        let pinch = UIPinchGestureRecognizer(target: self, action: #selector(scaleCellWidth))
+        collectionView.addGestureRecognizer(pinch)
         collectionView.backgroundColor = .systemPurple
     }
 
@@ -54,7 +69,7 @@ class ImageGalleryController: UICollectionViewController, UICollectionViewDragDe
 
 // MARK: - UICollectionViewDataSource
 
-extension ImageGalleryController {
+extension ImageGalleryCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
@@ -69,18 +84,18 @@ extension ImageGalleryController {
 
 // MARK: - UICollectionViewDelegate
 
-extension ImageGalleryController {
+extension ImageGalleryCollectionViewController {
 
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
+extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         let image = images[indexPath.row]
         let imageRatio = image.height / image.width
-        return CGSize(width: 200, height: 200 * imageRatio)
+        return CGSize(width: cellWidth, height: cellWidth * imageRatio)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -89,9 +104,9 @@ extension ImageGalleryController: UICollectionViewDelegateFlowLayout {
     }
 }
 
-// MARK: - Collection View Drag and Drop
+// MARK: - UICollectionViewDragDelegate && UICollectionViewDropDelegate
 
-extension ImageGalleryController {
+extension ImageGalleryCollectionViewController {
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
@@ -100,9 +115,7 @@ extension ImageGalleryController {
     }
 
     func collectionView(_ collectionView: UICollectionView, itemsForAddingTo session: UIDragSession,
-                        at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] {
-        return dragItem(at: indexPath)
-    }
+                        at indexPath: IndexPath, point: CGPoint) -> [UIDragItem] { dragItem(at: indexPath) }
 
     func collectionView(_ collectionView: UICollectionView, canHandle session: UIDropSession) -> Bool {
         let isSelf = (session.localDragSession?.localContext as? UICollectionView) == collectionView
@@ -167,7 +180,6 @@ extension ImageGalleryController {
                         print(2, dropImageHeight)
                         if let url = provider as? URL, let dropImageWidth = dropImageWidth, let dropImageHeight = dropImageHeight {
                             let image = Image(width: dropImageWidth, height: dropImageHeight, url: url.imageURL)
-
                             placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
                                 self.images.insert(image, at: insertionIndexPath.item)
                             })

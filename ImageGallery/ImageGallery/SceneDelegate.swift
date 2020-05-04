@@ -24,7 +24,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.windowScene = windowScene
         window?.makeKeyAndVisible()
         let splitVC = UISplitViewController()
-        let masterVC = UINavigationController(rootViewController: MasterController())
+        let masterVC = UINavigationController(rootViewController: ImageGalleryTableViewController())
         splitVC.viewControllers = [masterVC]
         splitVC.preferredDisplayMode = .primaryOverlay
         window?.rootViewController = splitVC

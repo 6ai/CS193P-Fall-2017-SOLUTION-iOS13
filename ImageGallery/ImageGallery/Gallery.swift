@@ -9,7 +9,7 @@ class Gallery {
 
     let navigationVC: UINavigationController = {
         let layout = UICollectionViewFlowLayout()
-        let controller = ImageGalleryController(collectionViewLayout: layout)
+        let controller = ImageGalleryCollectionViewController(collectionViewLayout: layout)
         let navigationVC = UINavigationController(rootViewController: controller)
         return navigationVC
     }()
