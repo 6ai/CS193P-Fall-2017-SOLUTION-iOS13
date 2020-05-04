@@ -93,9 +93,8 @@ extension ImageGalleryCollectionViewController {
 extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let image = images[indexPath.row]
-        let imageRatio = image.height / image.width
-        return CGSize(width: cellWidth, height: cellWidth * imageRatio)
+        let imageAspectRatio = images[indexPath.row].aspectRatio
+        return CGSize(width: cellWidth, height: cellWidth * imageAspectRatio)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -162,28 +161,27 @@ extension ImageGalleryCollectionViewController {
                         )
                 )
 
-                var dropImageWidth: CGFloat?
-                var dropImageHeight: CGFloat?
+                var dropImageAspectRatio: Double?
                 // todo for pictures with high resolution
                 item.dragItem.itemProvider.loadObject(ofClass: UIImage.self) { (provider, error) in
                     DispatchQueue.main.async {
                         if let image = provider as? UIImage {
-                            dropImageHeight = image.size.height
-                            dropImageWidth = image.size.width
-                            print(1, dropImageHeight)
+                            dropImageAspectRatio = Double(image.size.height / image.size.width)
+                            print(1, dropImageAspectRatio)
                         }
                     }
                 }
 
                 item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
                     DispatchQueue.main.async {
-                        print(2, dropImageHeight)
-                        if let url = provider as? URL, let dropImageWidth = dropImageWidth, let dropImageHeight = dropImageHeight {
-                            let image = Image(width: dropImageWidth, height: dropImageHeight, url: url.imageURL)
+                        print(2, dropImageAspectRatio)
+                        if let url = provider as? URL, let dropImageAspectRatio = dropImageAspectRatio {
+                            let image = Image(url: url.imageURL, aspectRatio: dropImageAspectRatio)
                             placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
                                 self.images.insert(image, at: insertionIndexPath.item)
                             })
                         } else {
+                            print("Image drop field")
                             placeholderContext.deletePlaceholder()
                         }
                     }

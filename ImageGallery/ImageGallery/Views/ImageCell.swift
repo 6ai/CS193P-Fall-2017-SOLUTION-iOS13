@@ -11,9 +11,6 @@ import UIKit
 class ImageCell: UICollectionViewCell {
 
     // MARK: - Properties
-    private(set) var width: CGFloat?
-    private(set) var height: CGFloat?
-
     private let activityIndicator = UIActivityIndicatorView()
 
     var imageURL: URL? { didSet { fetchImage() } }

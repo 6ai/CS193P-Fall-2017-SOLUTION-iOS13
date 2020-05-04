@@ -5,15 +5,7 @@
 
 import UIKit
 
-class Image {
-    let width: CGFloat
-    let height: CGFloat
-
+struct Image {
     let url: URL
-
-    init(width: CGFloat, height: CGFloat, url: URL) {
-        self.width = width
-        self.height = height
-        self.url = url
-    }
+    let aspectRatio: Double
 }
