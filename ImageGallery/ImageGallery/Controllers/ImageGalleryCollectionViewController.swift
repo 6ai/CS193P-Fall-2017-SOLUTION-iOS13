@@ -53,7 +53,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
     }
 
     private func configureCollectionView() {
-        collectionView.register(ImageCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        collectionView.register(ImageGalleryCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
 
@@ -70,7 +70,7 @@ extension ImageGalleryCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: cellIdentifier, for: indexPath as IndexPath) as! ImageCell
+                withReuseIdentifier: cellIdentifier, for: indexPath as IndexPath) as! ImageGalleryCollectionViewCell
         cell.imageURL = images[indexPath.row].url
         return cell
     }
@@ -120,7 +120,7 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate {
     }
 
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
-        guard let itemCell = collectionView?.cellForItem(at: indexPath) as? ImageCell,
+        guard let itemCell = collectionView?.cellForItem(at: indexPath) as? ImageGalleryCollectionViewCell,
               let image = itemCell.image else { return [] }
         let provider = NSItemProvider(object: image)
         let dragItem = UIDragItem(itemProvider: provider)
@@ -185,7 +185,6 @@ extension ImageGalleryCollectionViewController: UICollectionViewDropDelegate {
                 }
             }
         }
-
     }
 
 }

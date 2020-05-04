@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageCell: UICollectionViewCell {
+class ImageGalleryCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
     private let activityIndicator = UIActivityIndicatorView()
