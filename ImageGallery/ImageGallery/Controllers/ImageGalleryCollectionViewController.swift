@@ -9,8 +9,7 @@
 import UIKit
 
 
-class ImageGalleryCollectionViewController: UICollectionViewController,
-        UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+class ImageGalleryCollectionViewController: UICollectionViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -47,8 +46,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController,
     }
 
     private let cellIdentifier = "imageGalleryCollectionViewCell"
-
-    private var fetcher: ImageFetcher = ImageFetcher.shared
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -103,9 +100,9 @@ extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayo
     }
 }
 
-// MARK: - UICollectionViewDragDelegate && UICollectionViewDropDelegate
+// MARK: - UICollectionViewDragDelegate
 
-extension ImageGalleryCollectionViewController {
+extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate {
 
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession,
                         at indexPath: IndexPath) -> [UIDragItem] {
@@ -122,12 +119,6 @@ extension ImageGalleryCollectionViewController {
                 (session.canLoadObjects(ofClass: NSURL.self) && session.canLoadObjects(ofClass: UIImage.self))
     }
 
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,
-                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        let isSelf = (session.localDragSession?.localContext as? UICollectionView) == collectionView
-        return UICollectionViewDropProposal(operation: isSelf ? .move : .copy, intent: .insertAtDestinationIndexPath)
-    }
-
     private func dragItem(at indexPath: IndexPath) -> [UIDragItem] {
         guard let itemCell = collectionView?.cellForItem(at: indexPath) as? ImageCell,
               let image = itemCell.image else { return [] }
@@ -136,6 +127,17 @@ extension ImageGalleryCollectionViewController {
         dragItem.localObject = images[indexPath.item]
         return [dragItem]
 
+    }
+}
+
+// MARK: - UICollectionViewDropDelegate
+
+extension ImageGalleryCollectionViewController: UICollectionViewDropDelegate {
+
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession,
+                        withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        let isSelf = (session.localDragSession?.localContext as? UICollectionView) == collectionView
+        return UICollectionViewDropProposal(operation: isSelf ? .move : .copy, intent: .insertAtDestinationIndexPath)
     }
 
     func collectionView(_ collectionView: UICollectionView,
@@ -153,28 +155,23 @@ extension ImageGalleryCollectionViewController {
                 coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
             } else {
                 // Drag and drop between apps
-                let placeholderContext = coordinator.drop(
-                        item.dragItem,
-                        to: UICollectionViewDropPlaceholder(
-                                insertionIndexPath: destinationIndexPath,
-                                reuseIdentifier: cellIdentifier
-                        )
-                )
+                let placeholder = UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath,
+                        reuseIdentifier: cellIdentifier)
+                let placeholderContext = coordinator.drop(item.dragItem, to: placeholder)
+                var dropImageAspectRatio: CGFloat?
 
-                var dropImageAspectRatio: Double?
                 // todo for pictures with high resolution
+                // Extract image from item provider
                 item.dragItem.itemProvider.loadObject(ofClass: UIImage.self) { (provider, error) in
                     DispatchQueue.main.async {
                         if let image = provider as? UIImage {
-                            dropImageAspectRatio = Double(image.size.height / image.size.width)
-                            print(1, dropImageAspectRatio)
+                            dropImageAspectRatio = image.size.height / image.size.width
                         }
                     }
                 }
-
+                // Extract url from item provider
                 item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
                     DispatchQueue.main.async {
-                        print(2, dropImageAspectRatio)
                         if let url = provider as? URL, let dropImageAspectRatio = dropImageAspectRatio {
                             let image = Image(url: url.imageURL, aspectRatio: dropImageAspectRatio)
                             placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in

@@ -7,5 +7,5 @@ import UIKit
 
 struct Image {
     let url: URL
-    let aspectRatio: Double
+    let aspectRatio: CGFloat
 }
