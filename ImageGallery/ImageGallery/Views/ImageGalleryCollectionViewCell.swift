@@ -53,7 +53,6 @@ class ImageGalleryCollectionViewCell: UICollectionViewCell {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-
         addSubview(imageView)
         imageView.addSubview(activityIndicator)
         setupAutolayout()
@@ -61,8 +60,12 @@ class ImageGalleryCollectionViewCell: UICollectionViewCell {
 
     private func setupAutolayout() {
         imageView.anchor(top: topAnchor, left: leftAnchor, bottom: bottomAnchor, right: rightAnchor)
-        activityIndicator.anchor(top: imageView.topAnchor, left: imageView.leftAnchor, bottom: imageView.bottomAnchor, right: imageView.rightAnchor)
-
+        activityIndicator.anchor(
+                top: imageView.topAnchor,
+                left: imageView.leftAnchor,
+                bottom: imageView.bottomAnchor,
+                right: imageView.rightAnchor
+        )
     }
 
     required init?(coder: NSCoder) {
