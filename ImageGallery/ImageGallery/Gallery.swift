@@ -6,7 +6,7 @@
 import UIKit
 
 struct Gallery {
-
+    var state: GalleryState = .active
     var name: String
 
     let navigationVC: UINavigationController = {
@@ -15,4 +15,10 @@ struct Gallery {
         let navigationVC = UINavigationController(rootViewController: controller)
         return navigationVC
     }()
+}
+
+enum GalleryState {
+    case active
+    case delete
+    case recentlyDeleted
 }

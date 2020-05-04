@@ -11,7 +11,6 @@ import UIKit
 class ImageGalleryTableViewController: UITableViewController {
     private var imageGalleries: [Gallery] = []
     private var recentlyDeletedGalleries: [Gallery] = []
-    private let cellId = "cellId"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +24,7 @@ class ImageGalleryTableViewController: UITableViewController {
     }
 
     private func configureTableView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
         let addBarItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(createImageGallery))
         navigationItem.rightBarButtonItem = addBarItem
     }
@@ -61,7 +60,7 @@ extension ImageGalleryTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.identifier, for: indexPath)
         cell.textLabel?.text = indexPath.section == 0 ?
                 imageGalleries[indexPath.row].name : recentlyDeletedGalleries[indexPath.row].name
         return cell
