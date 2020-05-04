@@ -79,6 +79,7 @@ class ImageFetcher {
     }
 
     func fetchImage(with url: URL) -> UIImage? {
+        // todo async fetcher with completion handler
         guard let urlContents = try? Data(contentsOf: url.imageURL) else {
             return nil
         }

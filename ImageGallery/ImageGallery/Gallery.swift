@@ -5,7 +5,9 @@
 
 import UIKit
 
-class Gallery {
+struct Gallery {
+
+    var name: String
 
     let navigationVC: UINavigationController = {
         let layout = UICollectionViewFlowLayout()
@@ -13,10 +15,4 @@ class Gallery {
         let navigationVC = UINavigationController(rootViewController: controller)
         return navigationVC
     }()
-
-    var name: String
-
-    init(name: String) {
-        self.name = name
-    }
 }
