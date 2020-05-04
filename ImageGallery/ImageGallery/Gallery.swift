@@ -19,6 +19,5 @@ struct Gallery {
 
 enum GalleryState {
     case active
-    case delete
     case recentlyDeleted
 }

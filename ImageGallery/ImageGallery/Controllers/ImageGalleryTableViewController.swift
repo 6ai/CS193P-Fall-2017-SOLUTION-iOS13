@@ -10,7 +10,6 @@ import UIKit
 
 class ImageGalleryTableViewController: UITableViewController {
     private var imageGalleries: [Gallery] = []
-    private var recentlyDeletedGalleries: [Gallery] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,25 +51,28 @@ extension ImageGalleryTableViewController {
 extension ImageGalleryTableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 2
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? imageGalleries.count : recentlyDeletedGalleries.count
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.identifier, for: indexPath)
-        cell.textLabel?.text = indexPath.section == 0 ?
-                imageGalleries[indexPath.row].name : recentlyDeletedGalleries[indexPath.row].name
+        cell.textLabel?.text = imageGalleries[indexPath.row].name
         return cell
+    }
+
+    public override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        super.tableView(tableView, titleForHeaderInSection: section)
+        return "Header"
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle,
                             forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            recentlyDeletedGalleries.append(imageGalleries[indexPath.row])
             imageGalleries.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
