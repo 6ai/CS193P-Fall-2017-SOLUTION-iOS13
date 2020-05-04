@@ -45,7 +45,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
         }
     }
 
-    private let cellIdentifier = "imageGalleryCollectionViewCell"
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +52,8 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
     }
 
     private func configureCollectionView() {
-        collectionView.register(ImageGalleryCollectionViewCell.self, forCellWithReuseIdentifier: cellIdentifier)
+        collectionView.register(ImageGalleryCollectionViewCell.self,
+                forCellWithReuseIdentifier: ImageGalleryCollectionViewCell.identifier)
         collectionView.dragDelegate = self
         collectionView.dropDelegate = self
 
@@ -70,7 +70,8 @@ extension ImageGalleryCollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
-                withReuseIdentifier: cellIdentifier, for: indexPath as IndexPath) as! ImageGalleryCollectionViewCell
+                withReuseIdentifier: ImageGalleryCollectionViewCell.identifier,
+                for: indexPath as IndexPath) as! ImageGalleryCollectionViewCell
         cell.imageURL = images[indexPath.row].url
         return cell
     }
@@ -156,7 +157,7 @@ extension ImageGalleryCollectionViewController: UICollectionViewDropDelegate {
             } else {
                 // Drag and drop between apps
                 let placeholder = UICollectionViewDropPlaceholder(insertionIndexPath: destinationIndexPath,
-                        reuseIdentifier: cellIdentifier)
+                        reuseIdentifier: ImageGalleryCollectionViewCell.identifier)
                 let placeholderContext = coordinator.drop(item.dragItem, to: placeholder)
                 var dropImageAspectRatio: CGFloat?
 

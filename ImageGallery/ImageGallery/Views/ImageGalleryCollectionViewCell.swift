@@ -8,6 +8,16 @@
 
 import UIKit
 
+protocol CellIdentifiable {
+    static var identifier: String { get }
+}
+
+extension UICollectionViewCell: CellIdentifiable {
+    static var identifier: String {
+        get { String(describing: Self.self) }
+    }
+}
+
 class ImageGalleryCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Properties
