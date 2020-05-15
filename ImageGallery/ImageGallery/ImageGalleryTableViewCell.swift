@@ -5,7 +5,11 @@
 
 import UIKit
 
-class ImageGalleryTableViewCell: UITableViewCell, CellIdentifiable {
+class ImageGalleryTableViewCell: UITableViewCell {
+
+}
+
+extension UITableViewCell: CellIdentifiable {
     static var identifier: String {
         get { String(describing: Self.self) }
     }
