@@ -6,8 +6,7 @@
 import UIKit
 
 struct ImageGallery {
-    var state: GalleryState = .active
-    var name: String
+    var name: UITextField = UITextField()
 
     let navigationVC: UINavigationController = {
         let layout = UICollectionViewFlowLayout()
@@ -15,9 +14,10 @@ struct ImageGallery {
         let navigationVC = UINavigationController(rootViewController: controller)
         return navigationVC
     }()
+
+    init(name: String) {
+
+        self.name.text = name
+    }
 }
 
-enum GalleryState {
-    case active
-    case recentlyDeleted
-}
