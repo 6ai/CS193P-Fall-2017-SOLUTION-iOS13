@@ -5,7 +5,7 @@
 
 import UIKit
 
-class ImageController: UIViewController, UIScrollViewDelegate {
+class ImageViewController: UIViewController, UIScrollViewDelegate {
     private var imageView = UIImageView()
     private let activityIndicator = UIActivityIndicatorView()
 
@@ -21,7 +21,6 @@ class ImageController: UIViewController, UIScrollViewDelegate {
             imageView.sizeToFit()
             let size = newValue?.size ?? CGSize.zero
             scrollView.contentSize = size
-
             scrollViewHeight?.constant = size.height
             scrollViewWidth?.constant = size.width
         }
@@ -35,6 +34,7 @@ class ImageController: UIViewController, UIScrollViewDelegate {
                 self.image = UIImage(data: imageData)
             }
         }
+
     }
 
     private var scrollViewWidth: NSLayoutConstraint?

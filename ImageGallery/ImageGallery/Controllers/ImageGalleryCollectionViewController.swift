@@ -2,8 +2,8 @@
 //  ViewController.swift
 //  ImageGallery
 //
-//  Created by 6ai on 10/04/2020.
-//  Copyright © 2020 6ai. All rights reserved.
+//  Created by wreslte on 10/04/2020.
+//  Copyright © 2020 wreste. All rights reserved.
 //
 
 import UIKit
@@ -27,7 +27,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
     }
 
     func segueToImageDetail(with url: URL) {
-        let imageDetailController = ImageController()
+        let imageDetailController = ImageViewController()
         imageDetailController.imageURL = url
         navigationController?.pushViewController(imageDetailController, animated: true)
     }
@@ -161,28 +161,29 @@ extension ImageGalleryCollectionViewController: UICollectionViewDropDelegate {
                 let placeholderContext = coordinator.drop(item.dragItem, to: placeholder)
                 var dropImageAspectRatio: CGFloat?
 
-                // todo for pictures with high resolution
+                // fixme doesn't work for pictures with high resolution
                 // Extract image from item provider
                 item.dragItem.itemProvider.loadObject(ofClass: UIImage.self) { (provider, error) in
-                    DispatchQueue.main.async {
-                        if let image = provider as? UIImage {
-                            dropImageAspectRatio = image.size.height / image.size.width
-                        }
+                    if let image = provider as? UIImage {
+                        dropImageAspectRatio = image.size.height / image.size.width
                     }
                 }
+
                 // Extract url from item provider
                 item.dragItem.itemProvider.loadObject(ofClass: NSURL.self) { (provider, error) in
-                    DispatchQueue.main.async {
-                        if let url = provider as? URL, let dropImageAspectRatio = dropImageAspectRatio {
+                    if let url = provider as? URL, let dropImageAspectRatio = dropImageAspectRatio {
+                        DispatchQueue.main.async {
                             let image = Image(url: url.imageURL, aspectRatio: dropImageAspectRatio)
                             placeholderContext.commitInsertion(dataSourceUpdates: { insertionIndexPath in
                                 self.images.insert(image, at: insertionIndexPath.item)
                             })
-                        } else {
-                            print("Image drop field")
+                        }
+                    } else {
+                        DispatchQueue.main.async {
                             placeholderContext.deletePlaceholder()
                         }
                     }
+
                 }
             }
         }

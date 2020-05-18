@@ -5,7 +5,7 @@
 
 import UIKit
 
-struct Gallery {
+struct ImageGallery {
     var state: GalleryState = .active
     var name: String
 
