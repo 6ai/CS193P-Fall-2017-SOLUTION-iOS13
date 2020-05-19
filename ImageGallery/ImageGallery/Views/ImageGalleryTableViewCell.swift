@@ -11,6 +11,7 @@ protocol ImageGalleryTableViewCellDelegate {
 
 class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
     var delegate: ImageGalleryTableViewCellDelegate!
+    var cellText: String? = ""
     let textField: UITextField = {
         let tf = UITextField()
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(textFieldDidBeginEditing))
@@ -26,16 +27,16 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
     }
 
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textLabel?.text = ""
+        textLabel?.isHidden = true
         textField.isEnabled = true
         textField.becomeFirstResponder()
     }
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        delegate.tableViewCellTextLabelDidChange(from: "", to: textField.text ?? "")
-//        textField
-//        textLabel?.text = textField.text
+        delegate.tableViewCellTextLabelDidChange(from: textLabel?.text ?? "", to: textField.text ?? "")
+        textLabel?.isHidden = false
+        textField.text = nil
         return true
     }
 
@@ -46,6 +47,10 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
         doubleTap.numberOfTapsRequired = 2
         contentView.addGestureRecognizer(doubleTap)
         backgroundView = textField
+        // todo add padding
+//        backgroundView?.addSubview(textField)
+//        textField.anchor(top: backgroundView?.topAnchor, left: backgroundView?.leftAnchor, bottom: backgroundView?.bottomAnchor, right: backgroundView?.rightAnchor)
+//        textLabel?.addSubview(textField)
     }
 
     required init?(coder: NSCoder) {
