@@ -3,23 +3,13 @@
 //  ImageGallery
 //
 //  Created by wreslte on 10/04/2020.
-//  Copyright © 2020 wreste. All rights reserved.
+//  Copyright © 2020 wreslte. All rights reserved.
 //
 
 import UIKit
 
 
 class ImageGalleryCollectionViewController: UICollectionViewController {
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: animated)
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: animated)
-    }
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let url: URL = images[indexPath.row].url
@@ -34,7 +24,7 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
 
     private var images: [Image] = []
     var flowLayout: UICollectionViewFlowLayout? {
-        return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+        collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
     }
     var itemWidth: CGFloat = SizeRatio.defaultItemWidth {
         didSet { flowLayout?.invalidateLayout() }
@@ -50,7 +40,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
             } else {
                 itemWidth = newItemWidth
             }
-            print(itemWidth)
         }
     }
 
