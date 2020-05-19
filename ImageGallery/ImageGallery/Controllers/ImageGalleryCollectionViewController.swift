@@ -42,7 +42,14 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
 
     @objc private func scaleCellWidth(_ recognizer: UIPinchGestureRecognizer) {
         if case recognizer.state = UIGestureRecognizer.State.changed {
-            itemWidth = SizeRatio.defaultItemWidth * recognizer.scale
+            let newItemWidth = SizeRatio.defaultItemWidth * recognizer.scale
+            if newItemWidth > SizeRatio.maxItemWidth {
+                itemWidth = SizeRatio.maxItemWidth
+            } else if newItemWidth < SizeRatio.minItemWidth {
+                itemWidth = SizeRatio.minItemWidth
+            } else {
+                itemWidth = newItemWidth
+            }
             print(itemWidth)
         }
     }
@@ -123,13 +130,14 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate {
         let dragItem = UIDragItem(itemProvider: provider)
         dragItem.localObject = images[indexPath.item]
         return [dragItem]
-
     }
 }
 
 extension ImageGalleryCollectionViewController {
     private struct SizeRatio {
         static let defaultItemWidth: CGFloat = 200
+        static let minItemWidth: CGFloat = 150
+        static let maxItemWidth: CGFloat = 250
     }
 }
 
