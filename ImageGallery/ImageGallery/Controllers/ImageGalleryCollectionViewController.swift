@@ -33,18 +33,19 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
     }
 
     private var images: [Image] = []
-    private var cellWidth: CGFloat = 200 {
-        didSet { collectionView.reloadData() }
+    var flowLayout: UICollectionViewFlowLayout? {
+        return collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
+    }
+    var itemWidth: CGFloat = SizeRatio.defaultItemWidth {
+        didSet { flowLayout?.invalidateLayout() }
     }
 
     @objc private func scaleCellWidth(_ recognizer: UIPinchGestureRecognizer) {
-        // todo pitch gesture works
-        switch recognizer.state {
-        case .ended: break
-        default: break
+        if case recognizer.state = UIGestureRecognizer.State.changed {
+            itemWidth = SizeRatio.defaultItemWidth * recognizer.scale
+            print(itemWidth)
         }
     }
-
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,19 +81,14 @@ extension ImageGalleryCollectionViewController {
                                  numberOfItemsInSection section: Int) -> Int { images.count }
 }
 
-// MARK: - UICollectionViewDelegate
-
-extension ImageGalleryCollectionViewController {
-
-}
-
 // MARK: - UICollectionViewDelegateFlowLayout
 
 extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
+        print(#function)
         let imageAspectRatio = images[indexPath.row].aspectRatio
-        return CGSize(width: cellWidth, height: cellWidth * imageAspectRatio)
+        return CGSize(width: itemWidth, height: itemWidth * imageAspectRatio)
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
@@ -128,6 +124,12 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate {
         dragItem.localObject = images[indexPath.item]
         return [dragItem]
 
+    }
+}
+
+extension ImageGalleryCollectionViewController {
+    private struct SizeRatio {
+        static let defaultItemWidth: CGFloat = 200
     }
 }
 
@@ -188,5 +190,4 @@ extension ImageGalleryCollectionViewController: UICollectionViewDropDelegate {
             }
         }
     }
-
 }

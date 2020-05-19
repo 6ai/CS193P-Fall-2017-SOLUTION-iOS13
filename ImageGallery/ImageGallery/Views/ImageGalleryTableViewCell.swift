@@ -6,18 +6,14 @@
 import UIKit
 
 protocol ImageGalleryTableViewCellDelegate {
-    func tableViewCellTextLabelDidChange(from: String, to: String)
+    func tableViewCellTextContentDidChange(from oldText: String?, to newText: String?)
 }
 
 class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
     var delegate: ImageGalleryTableViewCellDelegate!
-    var cellText: String? = ""
     let textField: UITextField = {
         let tf = UITextField()
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(textFieldDidBeginEditing))
-        doubleTap.numberOfTapsRequired = 2
         tf.textAlignment = .center
-//        tf.addGestureRecognizer(doubleTap)
         tf.backgroundColor = .red
         return tf
     }()
@@ -34,29 +30,30 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
-        delegate.tableViewCellTextLabelDidChange(from: textLabel?.text ?? "", to: textField.text ?? "")
+        delegate.tableViewCellTextContentDidChange(from: textLabel?.text, to: textField.text)
         textLabel?.isHidden = false
         textField.text = nil
         return true
     }
 
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        textField.delegate = self
+
+    private func addDoubleTapGesture() {
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(cellTappedTwice))
         doubleTap.numberOfTapsRequired = 2
         contentView.addGestureRecognizer(doubleTap)
+    }
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        // fixme memory cycle
+        textField.delegate = self
         backgroundView = textField
-        // todo add padding
-//        backgroundView?.addSubview(textField)
-//        textField.anchor(top: backgroundView?.topAnchor, left: backgroundView?.leftAnchor, bottom: backgroundView?.bottomAnchor, right: backgroundView?.rightAnchor)
-//        textLabel?.addSubview(textField)
+        addDoubleTapGesture()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
 }
 
 extension UITableViewCell: CellIdentifiable {
