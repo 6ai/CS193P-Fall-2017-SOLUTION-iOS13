@@ -6,7 +6,7 @@
 import UIKit
 
 struct ImageGallery {
-    var name: UITextField = UITextField()
+    var name: String
 
     let navigationVC: UINavigationController = {
         let layout = UICollectionViewFlowLayout()
@@ -14,10 +14,5 @@ struct ImageGallery {
         let navigationVC = UINavigationController(rootViewController: controller)
         return navigationVC
     }()
-
-    init(name: String) {
-
-        self.name.text = name
-    }
 }
 
