@@ -9,8 +9,7 @@ import UIKit
 
 // Simple image fetcher without backup
 class ImageFetcher {
-    private init() {
-    }
+    private init() {}
 
     static var shared: ImageFetcher {
         let fetcher = ImageFetcher()
@@ -19,9 +18,7 @@ class ImageFetcher {
 
     func fetchImage(with url: URL) -> UIImage? {
         // todo async fetcher with completion handler
-        guard let urlContents = try? Data(contentsOf: url.imageURL) else {
-            return nil
-        }
+        guard let urlContents = try? Data(contentsOf: url.imageURL) else { return nil }
         return UIImage(data: urlContents)
     }
 

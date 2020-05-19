@@ -8,7 +8,7 @@ import UIKit
 class ImageViewController: UIViewController, UIScrollViewDelegate {
     private var imageView = UIImageView()
     private let activityIndicator = UIActivityIndicatorView()
-
+    // fixme scroll view
     var imageURL: URL? { didSet { fetchImage() } }
 
     private var image: UIImage? {

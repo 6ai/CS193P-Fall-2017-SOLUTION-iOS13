@@ -11,23 +11,40 @@ import UIKit
 
 class ImageGalleryCollectionViewController: UICollectionViewController {
 
-    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let url: URL = images[indexPath.row].url
-        segueToImageDetail(with: url)
+    // MARK: - Public API
+
+    var itemWidth: CGFloat = SizeRatio.defaultItemWidth {
+        didSet { flowLayout?.invalidateLayout() }
     }
 
-    func segueToImageDetail(with url: URL) {
+    // Lifecycle
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        configureCollectionView()
+    }
+
+    // Private implementation
+
+    private func segueToImageDetail(with url: URL) {
         let imageDetailController = ImageViewController()
         imageDetailController.imageURL = url
         navigationController?.pushViewController(imageDetailController, animated: true)
     }
 
     private var images: [Image] = []
-    var flowLayout: UICollectionViewFlowLayout? {
+    private var flowLayout: UICollectionViewFlowLayout? {
         collectionView?.collectionViewLayout as? UICollectionViewFlowLayout
-    }
-    var itemWidth: CGFloat = SizeRatio.defaultItemWidth {
-        didSet { flowLayout?.invalidateLayout() }
     }
 
     @objc private func scaleCellWidth(_ recognizer: UIPinchGestureRecognizer) {
@@ -43,11 +60,6 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
         }
     }
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureCollectionView()
-    }
-
     private func configureCollectionView() {
         collectionView.register(ImageGalleryCollectionViewCell.self,
                 forCellWithReuseIdentifier: ImageGalleryCollectionViewCell.identifier)
@@ -59,11 +71,15 @@ class ImageGalleryCollectionViewController: UICollectionViewController {
         collectionView.backgroundColor = .systemPurple
     }
 
-}
+    // MARK: - UICollectionViewDelegate
 
-// MARK: - UICollectionViewDataSource
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let url: URL = images[indexPath.row].url
+        segueToImageDetail(with: url)
+    }
 
-extension ImageGalleryCollectionViewController {
+    // MARK: - UICollectionViewDataSource
+
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath)
                     -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(
@@ -82,7 +98,6 @@ extension ImageGalleryCollectionViewController {
 extension ImageGalleryCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        print(#function)
         let imageAspectRatio = images[indexPath.row].aspectRatio
         return CGSize(width: itemWidth, height: itemWidth * imageAspectRatio)
     }
@@ -121,6 +136,8 @@ extension ImageGalleryCollectionViewController: UICollectionViewDragDelegate {
         return [dragItem]
     }
 }
+
+// MARK: - Constants
 
 extension ImageGalleryCollectionViewController {
     private struct SizeRatio {

@@ -36,7 +36,6 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
         return true
     }
 
-
     private func addDoubleTapGesture() {
         let doubleTap = UITapGestureRecognizer(target: self, action: #selector(cellTappedTwice))
         doubleTap.numberOfTapsRequired = 2
