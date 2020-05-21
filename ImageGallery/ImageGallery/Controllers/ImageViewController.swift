@@ -13,7 +13,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
 
     private var image: UIImage? {
         get {
-            return imageView.image
+            imageView.image
         }
         set {
             activityIndicator.stopAnimating()
@@ -48,7 +48,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     }()
 
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return imageView
+        imageView
     }
 
     func scrollViewDidZoom(_ scrollView: UIScrollView) {
