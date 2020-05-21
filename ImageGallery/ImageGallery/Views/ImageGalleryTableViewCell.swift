@@ -11,13 +11,14 @@ protocol ImageGalleryTableViewCellDelegate {
 
 class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
     var delegate: ImageGalleryTableViewCellDelegate!
-    let textField: UITextField = {
+    weak var textField: UITextField? = {
         let tf = UITextField()
         tf.textAlignment = .center
         return tf
     }()
 
     @objc func cellTappedTwice() {
+        guard let textField = textField else { return }
         textFieldDidBeginEditing(textField)
     }
 
@@ -43,8 +44,7 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        // fixme memory cycle
-        textField.delegate = self
+        textField?.delegate = self
         backgroundView = textField
         addDoubleTapGesture()
     }
