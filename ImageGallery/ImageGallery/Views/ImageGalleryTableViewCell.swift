@@ -58,6 +58,8 @@ extension ImageGalleryTableViewCell: UITextFieldDelegate {
     }
 }
 
+// MARK: - CellIdentifiable
+
 extension UITableViewCell: CellIdentifiable {
     static var identifier: String {
         get { String(describing: Self.self) }
