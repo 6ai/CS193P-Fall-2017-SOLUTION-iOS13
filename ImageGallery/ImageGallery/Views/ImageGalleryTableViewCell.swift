@@ -9,7 +9,7 @@ protocol ImageGalleryTableViewCellDelegate {
     func tableViewCellTextContentDidChange(from oldText: String?, to newText: String?)
 }
 
-class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
+class ImageGalleryTableViewCell: UITableViewCell {
     var delegate: ImageGalleryTableViewCellDelegate!
     weak var textField: UITextField? = {
         let tf = UITextField()
@@ -20,20 +20,6 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
     @objc func cellTappedTwice() {
         guard let textField = textField else { return }
         textFieldDidBeginEditing(textField)
-    }
-
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        textLabel?.isHidden = true
-        textField.isEnabled = true
-        textField.becomeFirstResponder()
-    }
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        delegate.tableViewCellTextContentDidChange(from: textLabel?.text, to: textField.text)
-        textLabel?.isHidden = false
-        textField.text = nil
-        return true
     }
 
     private func addDoubleTapGesture() {
@@ -51,6 +37,24 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - UITextFieldDelegate
+
+extension ImageGalleryTableViewCell: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textLabel?.isHidden = true
+        textField.isEnabled = true
+        textField.becomeFirstResponder()
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        delegate.tableViewCellTextContentDidChange(from: textLabel?.text, to: textField.text)
+        textLabel?.isHidden = false
+        textField.text = nil
+        return true
     }
 }
 
