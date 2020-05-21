@@ -17,22 +17,19 @@ class ImageGalleryTableViewCell: UITableViewCell {
         return tf
     }()
 
-    @objc func cellTappedTwice() {
+    @objc private func cellTappedTwice() {
         guard let textField = textField else { return }
         textFieldDidBeginEditing(textField)
-    }
-
-    private func addDoubleTapGesture() {
-        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(cellTappedTwice))
-        doubleTap.numberOfTapsRequired = 2
-        contentView.addGestureRecognizer(doubleTap)
     }
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         textField?.delegate = self
         backgroundView = textField
-        addDoubleTapGesture()
+
+        let doubleTap = UITapGestureRecognizer(target: self, action: #selector(cellTappedTwice))
+        doubleTap.numberOfTapsRequired = 2
+        contentView.addGestureRecognizer(doubleTap)
     }
 
     required init?(coder: NSCoder) {
