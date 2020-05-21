@@ -14,7 +14,6 @@ class ImageGalleryTableViewCell: UITableViewCell, UITextFieldDelegate {
     let textField: UITextField = {
         let tf = UITextField()
         tf.textAlignment = .center
-        tf.backgroundColor = .red
         return tf
     }()
 
