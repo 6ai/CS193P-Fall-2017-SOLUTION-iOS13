@@ -49,8 +49,8 @@ extension ImageGalleryTableViewCell: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         delegate.tableViewCellTextContentDidChange(from: textLabel?.text, to: textField.text)
-        textLabel?.isHidden = false
         textField.text = nil
+        textLabel?.isHidden = false
         return true
     }
 }
