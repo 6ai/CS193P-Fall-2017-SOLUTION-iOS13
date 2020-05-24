@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  PersistentImageGallery
 //
-//  Created by iloveass on 20/05/2020.
+//  Created by aqune on 20/05/2020.
 //  Copyright © 2020 aqune. All rights reserved.
 //
 
