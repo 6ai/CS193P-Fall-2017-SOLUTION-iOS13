@@ -12,9 +12,13 @@ struct ImageGallery {
         let layout = UICollectionViewFlowLayout()
         let controller = ImageGalleryCollectionViewController(collectionViewLayout: layout)
         let navigationVC = UINavigationController(rootViewController: controller)
-        navigationVC.navigationItem.title = "HILO"
         // todo add title
         return navigationVC
     }()
+
+    init(name: String) {
+        self.name = name
+        navigationVC.navigationItem.title = name
+    }
 }
 

@@ -16,7 +16,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
             imageView.image
         }
         set {
-            activityIndicator.stopAnimating()
             imageView.image = newValue
             imageView.sizeToFit()
             let size = newValue?.size ?? CGSize.zero
@@ -33,6 +32,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
             DispatchQueue.main.async {
                 self.image = UIImage(data: imageData)
             }
+            self.activityIndicator.stopAnimating()
         }
 
     }
@@ -40,9 +40,9 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     private var scrollViewWidth: NSLayoutConstraint?
     private var scrollViewHeight: NSLayoutConstraint?
 
-    let scrollView: UIScrollView = {
+    private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.minimumZoomScale = 1 / 25
+        scrollView.minimumZoomScale = 1 / 5
         scrollView.maximumZoomScale = 2
         return scrollView
     }()
@@ -67,12 +67,7 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
     }
 
     private func setupAutolayout() {
-
-        activityIndicator.anchor(top: imageView.topAnchor, left: imageView.leftAnchor,
-                bottom: imageView.bottomAnchor, right: imageView.rightAnchor)
-
         let imageViewSize = imageView.frame.size
-
 
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollViewWidth = scrollView.widthAnchor.constraint(equalToConstant: imageViewSize.width)
