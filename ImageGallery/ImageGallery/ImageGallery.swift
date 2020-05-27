@@ -12,7 +12,6 @@ struct ImageGallery {
         let layout = UICollectionViewFlowLayout()
         let controller = ImageGalleryCollectionViewController(collectionViewLayout: layout)
         let navigationVC = UINavigationController(rootViewController: controller)
-        // todo add title
         return navigationVC
     }()
 
