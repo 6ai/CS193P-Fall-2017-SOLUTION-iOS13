@@ -34,7 +34,6 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
             }
             self.activityIndicator.stopAnimating()
         }
-
     }
 
     private var scrollViewWidth: NSLayoutConstraint?
@@ -68,6 +67,9 @@ class ImageViewController: UIViewController, UIScrollViewDelegate {
 
     private func setupAutolayout() {
         let imageViewSize = imageView.frame.size
+
+        activityIndicator.anchor(top: imageView.topAnchor, left: imageView.leftAnchor,
+                bottom: imageView.bottomAnchor, right: imageView.rightAnchor)
 
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollViewWidth = scrollView.widthAnchor.constraint(equalToConstant: imageViewSize.width)
