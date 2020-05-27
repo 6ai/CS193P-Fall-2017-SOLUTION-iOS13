@@ -2,8 +2,8 @@
 //  ImageGalleryCollectionViewCell.swift
 //  ImageGallery
 //
-//  Created by 6ai on 11/04/2020.
-//  Copyright © 2020 6ai. All rights reserved.
+//  Created by aqune on 11/04/2020.
+//  Copyright © 2020 aqune. All rights reserved.
 //
 
 import UIKit
@@ -26,10 +26,9 @@ class ImageGalleryCollectionViewCell: UICollectionViewCell {
     var imageURL: URL? { didSet { fetchImage() } }
     var image: UIImage? {
         get {
-            return imageView.image
+            imageView.image
         }
         set {
-            activityIndicator.stopAnimating()
             imageView.image = newValue
             imageView.sizeToFit()
         }
@@ -48,6 +47,7 @@ class ImageGalleryCollectionViewCell: UICollectionViewCell {
             DispatchQueue.main.async {
                 self.image = UIImage(data: imageData)
             }
+            self.activityIndicator.stopAnimating()
         }
     }
 

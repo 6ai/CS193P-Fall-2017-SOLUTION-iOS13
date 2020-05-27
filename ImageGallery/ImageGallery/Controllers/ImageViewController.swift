@@ -1,6 +1,6 @@
 //
-// Created by 6ai on 21/04/2020.
-// Copyright (c) 2020 6ai. All rights reserved.
+// Created by aqune on 21/04/2020.
+// Copyright (c) 2020 aqune. All rights reserved.
 //
 
 import UIKit
@@ -8,10 +8,9 @@ import UIKit
 class ImageViewController: UIViewController, UIScrollViewDelegate {
     private var imageView = UIImageView()
     private let activityIndicator = UIActivityIndicatorView()
-    // fixme scroll view
     var imageURL: URL? { didSet { fetchImage() } }
 
-    private var image: UIImage? {
+    var image: UIImage? {
         get {
             imageView.image
         }
