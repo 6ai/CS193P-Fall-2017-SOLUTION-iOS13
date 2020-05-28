@@ -12,8 +12,11 @@
 		B09481CDA77C9B1CE06DE685 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B09483E497C97F21E0E9F74F /* Main.storyboard */; };
 		B09483B01BAA79DD93A42C31 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B09488D9AFAFB007661AD7C1 /* LaunchScreen.storyboard */; };
 		B09484EA2AD5F225563A8C91 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0948ACDEAE0228E812CF643 /* AppDelegate.swift */; };
+		B094897366DC4EC31264F035 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0948D5978F074BE7F8A6018 /* Image.swift */; };
 		B0948D68C891631B3FEEF0B2 /* DocumentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0948191EEF3F7A410AD6434 /* DocumentViewController.swift */; };
+		B0948D69CD5A9D4B83349D9D /* ImageGalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09487869C874402330A7BEC /* ImageGalleryCollectionViewCell.swift */; };
 		B0948DCE4658F6639A12A867 /* Document.swift in Sources */ = {isa = PBXBuildFile; fileRef = B09482850CA8F08B74CF7337 /* Document.swift */; };
+		B0948E81E2FF83AA789063F9 /* ImageGallery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0948C4C18A98225F1FA32B2 /* ImageGallery.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -22,9 +25,12 @@
 		B0948191EEF3F7A410AD6434 /* DocumentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentViewController.swift; sourceTree = "<group>"; };
 		B09482850CA8F08B74CF7337 /* Document.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Document.swift; sourceTree = "<group>"; };
 		B09485113EEA2356B6491524 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.info; path = Info.plist; sourceTree = "<group>"; };
+		B09487869C874402330A7BEC /* ImageGalleryCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGalleryCollectionViewCell.swift; sourceTree = "<group>"; };
 		B09488C3BFDBB1B3C0F6765A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B0948A65C035C085DE097316 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B0948ACDEAE0228E812CF643 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		B0948C4C18A98225F1FA32B2 /* ImageGallery.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageGallery.swift; sourceTree = "<group>"; };
+		B0948D5978F074BE7F8A6018 /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		B0948F40274C61468663BA8E /* PersistentImageGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PersistentImageGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -50,6 +56,9 @@
 				B094815F54015A1D24276EB5 /* DocumentBrowserViewController.swift */,
 				B0948191EEF3F7A410AD6434 /* DocumentViewController.swift */,
 				B09482850CA8F08B74CF7337 /* Document.swift */,
+				B09487869C874402330A7BEC /* ImageGalleryCollectionViewCell.swift */,
+				B0948C4C18A98225F1FA32B2 /* ImageGallery.swift */,
+				B0948D5978F074BE7F8A6018 /* Image.swift */,
 			);
 			path = PersistentImageGallery;
 			sourceTree = "<group>";
@@ -139,6 +148,9 @@
 				B0948013B8CA3558D1EB9D17 /* DocumentBrowserViewController.swift in Sources */,
 				B0948D68C891631B3FEEF0B2 /* DocumentViewController.swift in Sources */,
 				B0948DCE4658F6639A12A867 /* Document.swift in Sources */,
+				B0948D69CD5A9D4B83349D9D /* ImageGalleryCollectionViewCell.swift in Sources */,
+				B0948E81E2FF83AA789063F9 /* ImageGallery.swift in Sources */,
+				B094897366DC4EC31264F035 /* Image.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
