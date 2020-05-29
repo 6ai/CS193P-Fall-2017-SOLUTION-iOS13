@@ -1,6 +1,6 @@
 //
-//  ImageGalleryCollectionViewCell.swift
-//  ImageGallery
+//  ImageGalleryCell.swift
+//  PersistentImageGallery
 //
 //  Created by aqune on 11/04/2020.
 //  Copyright © 2020 aqune. All rights reserved.
@@ -18,7 +18,7 @@ extension UICollectionViewCell: CellIdentifiable {
     }
 }
 
-class ImageGalleryCollectionViewCell: UICollectionViewCell {
+class ImageGalleryCell: UICollectionViewCell {
 
     // MARK: - Properties
     private let activityIndicator = UIActivityIndicatorView()
